@@ -3,13 +3,16 @@ package bl;
 import java.util.Vector;
 
 public class GasStation {
-	private int id;
 	private String name;
 	private Vector<FuelPump> pumps;
 	private CleaningServices cleaningSrv;
-	private int fuelPricePerLiter;
+	private float fuelPricePerLiter;
 	private int carWashPrice;
 	private int autoWashTimeToClean;
+	
+	public GasStation (String name){
+		setName(name);
+	}
 	
 	public void addPump(FuelPump fp){
 		pumps.add(fp);
@@ -19,12 +22,6 @@ public class GasStation {
 		setCleaningSrv(cs);
 	}
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public String getName() {
 		return name;
 	}
@@ -41,11 +38,11 @@ public class GasStation {
 	public void setCleaningSrv(CleaningServices cleaningSrv) {
 		this.cleaningSrv = cleaningSrv;
 	}
-	public int getFuelPricePerLiter() {
+	public float getFuelPricePerLiter() {
 		return fuelPricePerLiter;
 	}
-	public void setFuelPricePerLiter(int fuelPricePerLiter) {
-		this.fuelPricePerLiter = fuelPricePerLiter;
+	public void setFuelPricePerLiter(float f) {
+		this.fuelPricePerLiter = f;
 	}
 	public int getCarWashPrice() {
 		return carWashPrice;
