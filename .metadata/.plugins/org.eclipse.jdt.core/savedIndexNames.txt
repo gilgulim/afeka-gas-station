@@ -1,0 +1,2 @@
+INDEX VERSION 1.127+C:\Users\gilp\Desktop\Private\Afeka\Advance Java\Assignments\Gas-station\.metadata\.plugins\org.eclipse.jdt.core
+3245014801.index
