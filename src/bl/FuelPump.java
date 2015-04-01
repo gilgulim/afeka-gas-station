@@ -34,6 +34,12 @@ public class FuelPump {
 	public void setBusy(boolean isBusy) {
 		this.isBusy = isBusy;
 	}
+
+	@Override
+	public String toString() {
+		return "FuelPump [id=" + id + ", isActive=" + isActive + ", isBusy="
+				+ isBusy + "]";
+	}
 	
 	
 }

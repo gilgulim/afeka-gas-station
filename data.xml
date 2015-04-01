@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GasStation name="Paz" numOfPumps="4" pricePerLiter="7.82" washPrice="40" secondsPerAutoClean="15">
 	<MainFuelPool maxCapacity="500" currentCapacity="220" />
-	<CleaningService numOfTeams="3" numOfMachines="2">
-		<Team numOfEmployees="3">
+	<CleaningService numOfMachines="2">
+		<Team>
 			<Employee name="gogo" />
 			<Employee name="momo" />
 			<Employee name="yoyo" />
 		</Team>
-		<Team numOfEmployees="2">
+		<Team>
 			<Employee name="coco" />
 			<Employee name="lolo" />
 		</Team>
-		<Team numOfEmployees="2">
+		<Team>
 			<Employee name="fofo" />
 			<Employee name="toto" />
 		</Team>

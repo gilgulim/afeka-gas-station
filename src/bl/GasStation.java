@@ -1,17 +1,22 @@
 package bl;
 
+import java.util.Queue;
 import java.util.Vector;
 
 public class GasStation {
 	private String name;
 	private Vector<FuelPump> pumps;
+	private Vector<Car> cars;
 	private CleaningServices cleaningSrv;
+	private FuelRepository fuelRep;
 	private float fuelPricePerLiter;
 	private int carWashPrice;
 	private int autoWashTimeToClean;
 	
 	public GasStation (String name){
 		setName(name);
+		pumps = new Vector<FuelPump>();
+		cars = new  Vector<Car>();
 	}
 	
 	public void addPump(FuelPump fp){
@@ -32,6 +37,13 @@ public class GasStation {
 		return pumps;
 	}
 
+	public FuelRepository getFuelRep() {
+		return fuelRep;
+	}
+	public void setFuelRep(FuelRepository fuelRep) {
+		this.fuelRep = fuelRep;
+	}
+	
 	public CleaningServices getCleaningSrv() {
 		return cleaningSrv;
 	}
@@ -55,6 +67,20 @@ public class GasStation {
 	}
 	public void setAutoWashTimeToClean(int autoWashTimeToClean) {
 		this.autoWashTimeToClean = autoWashTimeToClean;
-	}	
+	}
+
+	@Override
+	public String toString() {
+		return "GasStation [name=" + name + ", pumps=" + pumps + ", carsQueue="
+				+ cars + ", cleaningSrv=" + cleaningSrv + ", fuelRep="
+				+ fuelRep + ", fuelPricePerLiter=" + fuelPricePerLiter
+				+ ", carWashPrice=" + carWashPrice + ", autoWashTimeToClean="
+				+ autoWashTimeToClean + "]";
+	}
+
+	public void addCar (Car car) {
+		this.cars.addElement(car);
+	}
+	
 	
 }

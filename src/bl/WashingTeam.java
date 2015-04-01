@@ -11,6 +11,7 @@ public class WashingTeam {
 	public WashingTeam(){
 		setId(idGenerator++);
 		setBusy(false);
+		employees = new Vector<Person>();
 	}
 	public void addEmployee(String name){
 		Person p = new Person(name);
@@ -32,5 +33,12 @@ public class WashingTeam {
 	public Vector<Person> getEmployees() {
 		return employees;
 	}
+	@Override
+	public String toString() {
+		return "WashingTeam [id=" + id + ", isBusy=" + isBusy + ", employees="
+				+ employees + "]";
+	}
+	
+
 
 }

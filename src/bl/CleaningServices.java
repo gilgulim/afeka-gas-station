@@ -6,9 +6,14 @@ import java.util.Vector;
 public class CleaningServices {
 	private Vector<WashingTeam> washTeams;
 	private Vector<WashingMachine> washMachines;
-	private Queue<Car> carsQueue;
+	private Vector<Car> cars;
 	
 	
+	public CleaningServices(){
+		washTeams = new Vector<WashingTeam>();
+		washMachines = new Vector<WashingMachine>();
+		cars = new Vector<Car>();
+	}
 	public void addWashTeam(WashingTeam wt){
 		washTeams.add(wt);
 	}
@@ -16,20 +21,18 @@ public class CleaningServices {
 	public void addWashMachine(WashingMachine wm){
 		washMachines.add(wm);
 	}
-	
-	public void addCarToQueue(Car c){
-		carsQueue.add(c);
-	}
-	
-	public Car pullCarFromQueue(){
-		return carsQueue.poll();
-	}
-	
+		
 	public Vector<WashingTeam> getWashTeams() {
 		return washTeams;
 	}
 	public Vector<WashingMachine> getWashMachines() {
 		return washMachines;
+	}
+
+	@Override
+	public String toString() {
+		return "CleaningServices [washTeams=" + washTeams + ", washMachines="
+				+ washMachines + ", carsQueue=" + cars + "]";
 	}
 	
 	

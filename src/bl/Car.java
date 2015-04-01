@@ -4,7 +4,8 @@ public class Car {
 	private int id;
 	private boolean isRequiresWash;
 	private boolean isRequiresFuel;
-	private int FuelAmountRequired;
+	private int fuelAmountRequired;
+	private int pumpIndex;
 	
 	public Car(int id, boolean requiresWash, boolean requiresFuel){
 		setId(id);
@@ -31,9 +32,18 @@ public class Car {
 		this.isRequiresFuel = isRequiresFuel;
 	}
 	public int getFuelAmountRequired() {
-		return FuelAmountRequired;
+		return fuelAmountRequired;
 	}
 	public void setFuelAmountRequired(int fuelAmountRequired) {
-		FuelAmountRequired = fuelAmountRequired;
+		this.fuelAmountRequired = fuelAmountRequired;
 	}
+
+	public int getPumpIndex() {
+		return pumpIndex;
+	}
+
+	public void setPumpIndex(int pumpIndex) {
+		this.pumpIndex = pumpIndex;
+	}
+	
 }
