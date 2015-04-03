@@ -1,12 +1,13 @@
 package bl;
 
+
+
 public class Car {
 	private int id;
 	private boolean isRequiresWash;
 	private boolean isRequiresFuel;
 	private int fuelAmountRequired;
 	private int pumpIndex;
-	
 	public Car(int id, boolean requiresWash, boolean requiresFuel){
 		setId(id);
 		setRequiresWash(requiresWash);

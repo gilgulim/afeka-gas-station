@@ -18,6 +18,10 @@ public class WashingTeam {
 		employees.add(p);
 	}
 	
+	public void addEmployee(Person p){
+		employees.add(p);
+	}
+	
 	public int getId() {
 		return id;
 	}

@@ -24,7 +24,6 @@ public class XMLParser {
 	private DocumentBuilderFactory dbFactory;
 	private DocumentBuilder dBuilder;
 	private Document doc;
-	private GasStation gasStation;
 	
 	public XMLParser(File xmlFile) throws ParserConfigurationException, SAXException, IOException{
 		dbFactory = DocumentBuilderFactory.newInstance();

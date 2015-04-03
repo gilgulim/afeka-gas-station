@@ -1,18 +1,18 @@
 package bl;
 
-import java.util.Queue;
+import sun.misc.Queue;
 import java.util.Vector;
 
 public class CleaningServices {
 	private Vector<WashingTeam> washTeams;
 	private Vector<WashingMachine> washMachines;
-	private Vector<Car> cars;
+	private Queue<Car> carsQueue;
 	
 	
 	public CleaningServices(){
 		washTeams = new Vector<WashingTeam>();
 		washMachines = new Vector<WashingMachine>();
-		cars = new Vector<Car>();
+		carsQueue = new Queue<Car>();
 	}
 	public void addWashTeam(WashingTeam wt){
 		washTeams.add(wt);
@@ -32,7 +32,7 @@ public class CleaningServices {
 	@Override
 	public String toString() {
 		return "CleaningServices [washTeams=" + washTeams + ", washMachines="
-				+ washMachines + ", carsQueue=" + cars + "]";
+				+ washMachines + ", carsQueue=" + carsQueue + "]";
 	}
 	
 	

@@ -1,15 +1,19 @@
 package bl;
 
+import sun.misc.Queue;
+
 public class FuelPump {
 	static private int idGenerator = 1;
 	private int id;
 	private boolean isActive;
 	private boolean isBusy;
+	private Queue<Car> carsQueue;
 	
 	public FuelPump(){
 		setId(idGenerator++);
 		setActive(true);
 		setBusy(false);
+		carsQueue = new Queue<Car>();
 	}
 	
 	public void fuelCar(int carId){
