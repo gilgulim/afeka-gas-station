@@ -14,7 +14,7 @@ public class CleaningServices {
 	public CleaningServices(int carWashPrice, int autoWashTime){
 		this.carWashPrice = carWashPrice;
 		this.autoWashTime = autoWashTime;
-		
+
 		washTeams = new Vector<WashingTeam>();
 		washMachines = new Vector<WashingMachine>();
 		carsQueue = new Queue<Car>();

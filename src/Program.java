@@ -17,7 +17,7 @@ import Helpers.XMLParser;
 
 
 public class Program extends Thread{
-	private static final int SECONDS = 1000; 
+
 	private static BlockingQueue<Car> blockingQueue;
 	
 	public static void main(String[] args) {
