@@ -76,7 +76,7 @@ public class Program {
 				
 				
 					System.out.println("PUSH_THREAD: Pushing a car to the queue");
-					blockingQueue.put(new Car(1, true, true));
+					blockingQueue.put(new Car(1, true, true,null));
 					
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
