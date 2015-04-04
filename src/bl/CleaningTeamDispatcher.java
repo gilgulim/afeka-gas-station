@@ -9,7 +9,9 @@ public class CleaningTeamDispatcher extends Thread{
 	public CleaningTeamDispatcher(){
 		
 	}
-	public void run(){
+
+	public synchronized Car getCarFromQueue(){
 		
 	}
+	
 }

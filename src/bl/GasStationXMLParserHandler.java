@@ -1,4 +1,4 @@
-package XMLHandler;
+package bl;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,14 +16,7 @@ import org.xml.sax.SAXException;
 import com.sun.beans.util.Cache;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
-import bl.Car;
-import bl.CleaningServices;
-import bl.FuelPump;
-import bl.FuelRepository;
-import bl.GasStation;
-import bl.Person;
-import bl.WashingMachine;
-import bl.WashingTeam;
+import Helpers.XMLParser;
 
 public class GasStationXMLParserHandler {
 	private XMLParser xmlParser;

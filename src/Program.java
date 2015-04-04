@@ -13,8 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import bl.*;
-import XMLHandler.GasStationXMLParserHandler;
-import XMLHandler.XMLParser;
+import Helpers.XMLParser;
 
 
 public class Program {
