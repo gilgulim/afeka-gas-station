@@ -6,7 +6,6 @@ import java.util.Vector;
 public class GasStation {
 	private String name;
 	private Vector<FuelPump> pumps;
-	private Vector<Car> cars;
 	private CleaningServices cleaningSrv;
 	private FuelRepository fuelRep;
 	private float fuelPricePerLiter;
@@ -16,7 +15,18 @@ public class GasStation {
 	public GasStation (String name){
 		setName(name);
 		pumps = new Vector<FuelPump>();
-		cars = new  Vector<Car>();
+	}
+	
+	public void addCarToCleaningServiceQueue(Car car){
+		//TODO: fill method;
+	}
+	
+	public void addCarToFuelPumpsQueue(Car car){
+		//TODO: fill method;
+	}
+	
+	public void dissmissCarFromGasStation(Car car){
+		//TODO: fill method;
 	}
 	
 	public void addPump(FuelPump fp){
@@ -71,16 +81,9 @@ public class GasStation {
 
 	@Override
 	public String toString() {
-		return "GasStation [name=" + name + ", pumps=" + pumps + ", carsQueue="
-				+ cars + ", cleaningSrv=" + cleaningSrv + ", fuelRep="
+		return "GasStation [name=" + name + ", pumps=" + pumps + ", cleaningSrv=" + cleaningSrv + ", fuelRep="
 				+ fuelRep + ", fuelPricePerLiter=" + fuelPricePerLiter
 				+ ", carWashPrice=" + carWashPrice + ", autoWashTimeToClean="
 				+ autoWashTimeToClean + "]";
 	}
-
-	public void addCar (Car car) {
-		this.cars.addElement(car);
-	}
-	
-	
 }
