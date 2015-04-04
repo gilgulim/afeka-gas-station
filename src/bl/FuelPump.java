@@ -60,6 +60,7 @@ public class FuelPump implements Runnable
 				
 				//Will wait here if the queue is empty
 				Car pumpingCar = carsQueue.take();
+				
 				fuelAmount = pumpingCar.getFuelAmountRequired();
 				gasStation = pumpingCar.getGasStaion();
 				fuelRep = gasStation.getFuelRep();
@@ -73,7 +74,7 @@ public class FuelPump implements Runnable
 						fuelRep.getOneLitterOfFuel();
 						
 						//Waiting here to simulate pumping one litter of fuel
-						Thread.sleep(gasStation.getPumpingTimePerLitter());
+						Thread.sleep(gasStation.getPumpingPacePerLiter());
 						
 						//Decrease the amount of left fuel by one litter
 						--fuelAmount;

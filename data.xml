@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GasStation name="Paz" numOfPumps="4" pricePerLiter="7.82" washPrice="40" secondsPerAutoClean="4">
+<GasStation name="Paz" numOfPumps="4" pricePerLiter="7.82" pupingPacePerLiter="500">
 	<MainFuelPool maxCapacity="500" currentCapacity="220" />
-	<CleaningService numOfMachines="1">
+	<CleaningService washPrice="40" autoWashTime="4">
 		<Team>
 			<Employee name="gogo" />
 			<Employee name="momo" />

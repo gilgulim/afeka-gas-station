@@ -7,23 +7,20 @@ public class GasStation {
 	private Vector<FuelPump> pumps;
 	private CleaningServices cleaningSrv;
 	private FuelRepository fuelRep;
-	private float fuelPricePerLiter;
-	private int carWashPrice;
-	private int autoWashTimeToClean;
-	private int pumpingTimePerLitter;
 	
-	public GasStation (String name){
-		setName(name);
+	private float fuelPricePerLiter;
+	private int pumpingPacePerLiter;
+	
+	public GasStation (String name, float fuelPricePerLiter, int pumpingPacePerLiter){
+		this.name = name;
+		this.fuelPricePerLiter = fuelPricePerLiter;
+		this.pumpingPacePerLiter = pumpingPacePerLiter;
 		pumps = new Vector<FuelPump>();
 	}
 	
 	public void AddCarDispatcherQueue(Car car){
 		
 		//TODO: Implement this method
-	}
-	
-	public void dissmissCarFromGasStation(Car car){
-		//TODO: fill method;
 	}
 	
 	public void addPump(FuelPump fp){
@@ -33,24 +30,15 @@ public class GasStation {
 	public void setCleanSrv(CleaningServices cs){
 		setCleaningSrv(cs);
 	}
-	
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public Vector<FuelPump> getPumps() {
-		return pumps;
-	}
-
 	public FuelRepository getFuelRep() {
 		return fuelRep;
 	}
 	public void setFuelRep(FuelRepository fuelRep) {
 		this.fuelRep = fuelRep;
 	}
-	
 	public CleaningServices getCleaningSrv() {
 		return cleaningSrv;
 	}
@@ -63,27 +51,13 @@ public class GasStation {
 	public void setFuelPricePerLiter(float f) {
 		this.fuelPricePerLiter = f;
 	}
-	public int getCarWashPrice() {
-		return carWashPrice;
-	}
-	public void setCarWashPrice(int carWashPrice) {
-		this.carWashPrice = carWashPrice;
-	}
-	public int getAutoWashTimeToClean() {
-		return autoWashTimeToClean;
-	}
-	public void setAutoWashTimeToClean(int autoWashTimeToClean) {
-		this.autoWashTimeToClean = autoWashTimeToClean;
-	}
-	public int getPumpingTimePerLitter(){
-		return pumpingTimePerLitter;
+	public int getPumpingPacePerLiter(){
+		return pumpingPacePerLiter;
 	}
 
 	@Override
 	public String toString() {
 		return "GasStation [name=" + name + ", pumps=" + pumps + ", cleaningSrv=" + cleaningSrv + ", fuelRep="
-				+ fuelRep + ", fuelPricePerLiter=" + fuelPricePerLiter
-				+ ", carWashPrice=" + carWashPrice + ", autoWashTimeToClean="
-				+ autoWashTimeToClean + "]";
+				+ fuelRep + ", fuelPricePerLiter=" + fuelPricePerLiter + "]";
 	}
 }

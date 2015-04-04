@@ -16,7 +16,6 @@ public class AutoCleaningDispatcher extends Thread{
 		washingTeamQueue = new LinkedBlockingQueue<WashingTeam>();
 		
 		this.gasStation = gasStation;
-		autoWashTimeToClean = this.gasStation.getAutoWashTimeToClean();
 		for (int i=0; i<gasStation.getCleaningSrv().getWashTeams().size(); i++){
 			try {
 				washingTeamQueue.put(gasStation.getCleaningSrv().getWashTeams().elementAt(i));

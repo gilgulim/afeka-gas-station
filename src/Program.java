@@ -69,7 +69,6 @@ public class Program extends Thread{
 			//car.getGasStaion().addCarToCleaningServiceQueue(car);
 		}else{
 			//exit gas station
-			car.getGasStaion().dissmissCarFromGasStation(car);
 			car.setGasStaion(null);
 		}
 	}

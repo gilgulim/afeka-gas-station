@@ -38,15 +38,15 @@ public class GasStationXMLParserHandler {
 		return fuelRep;	
 	}
 	
-	public FuelPump parseToFuelPump(){
-		FuelPump fp = new FuelPump();
-		return fp;
-	}
 	
 	public CleaningServices parseToCleanSrv(Node cleanSrvNode){
-		CleaningServices cleanSrv = new CleaningServices();
+		String washPriceStr = xmlParser.getNodeAttr("washPrice", cleanSrvNode);
+		String autoWashTimeStr = xmlParser.getNodeAttr("autoWashTime", cleanSrvNode);
+		
+		CleaningServices cleanSrv = new CleaningServices(Integer.parseInt(washPriceStr), 
+														Integer.parseInt(autoWashTimeStr));
+		
 		NodeList teamsNodeList = cleanSrvNode.getChildNodes();
-		String numOfMachines = xmlParser.getNodeAttr("numOfMachines", cleanSrvNode);
 		
 		for (int i=0; i<teamsNodeList.getLength(); i++){
 			if(teamsNodeList.item(i).getNodeName().equals("Team")){
@@ -56,10 +56,6 @@ public class GasStationXMLParserHandler {
 			}
 		}
 		
-		for (int i=0; i<Integer.parseInt(numOfMachines); i++){
-			WashingMachine washMachine = new WashingMachine();
-			cleanSrv.addWashMachine(washMachine);
-		}
 		return cleanSrv;
 	}
 
@@ -117,21 +113,27 @@ public class GasStationXMLParserHandler {
 	public GasStation parseToGasStation() {
 		Node rootNode = xmlParser.getNode("GasStation", xmlParser.getChildNode());
 		String gasStationName = xmlParser.getNodeAttr("name", rootNode);
-		gasStation = new GasStation(gasStationName);
 		
-		String fuelPricePerLiter = xmlParser.getNodeAttr("pricePerLiter", rootNode);
-		gasStation.setFuelPricePerLiter(Float.parseFloat(fuelPricePerLiter));
+		String fuelPricePerLiterStr = xmlParser.getNodeAttr("pricePerLiter", rootNode);
+		float fuelPricePerLiter = Float.parseFloat(fuelPricePerLiterStr);
 		
-		String washPrice = xmlParser.getNodeAttr("washPrice", rootNode);
+		String pumpingPacePerLiterStr = xmlParser.getNodeAttr("pupingPacePerLiter", rootNode);
+		int pupingPacePerLiter = Integer.parseInt(pumpingPacePerLiterStr);
+		
+		gasStation = new GasStation(gasStationName, fuelPricePerLiter, pupingPacePerLiter);
+		
+		String numOfPumpsStr = xmlParser.getNodeAttr("numOfPumps", rootNode);
+		int numOfPumps =Integer.parseInt(numOfPumpsStr); 
+		
+		for (int i=0; i<numOfPumps; i++){
+			gasStation.addPump(new FuelPump());
+		}
+		
+		/*String washPrice = xmlParser.getNodeAttr("washPrice", rootNode);
 		gasStation.setCarWashPrice(Integer.parseInt(washPrice));
 		
 		String secondsPerAutoClean = xmlParser.getNodeAttr("secondsPerAutoClean", rootNode);
-		gasStation.setAutoWashTimeToClean(Integer.parseInt(secondsPerAutoClean));
-		
-		String numOfPumps = xmlParser.getNodeAttr("numOfPumps", rootNode);
-		for (int i=0; i<Integer.parseInt(numOfPumps); i++){
-			gasStation.addPump(parseToFuelPump());
-		}
+		gasStation.setAutoWashTimeToClean(Integer.parseInt(secondsPerAutoClean));*/
 		
 		NodeList rootEntitiesNodeList = rootNode.getChildNodes();
 		

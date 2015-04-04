@@ -7,9 +7,14 @@ public class CleaningServices {
 	private Vector<WashingTeam> washTeams;
 	private Vector<WashingMachine> washMachines;
 	private Queue<Car> carsQueue;
+	private int carWashPrice;
+	private int autoWashTime;
 	
 	
-	public CleaningServices(){
+	public CleaningServices(int carWashPrice, int autoWashTime){
+		this.carWashPrice = carWashPrice;
+		this.autoWashTime = autoWashTime;
+		
 		washTeams = new Vector<WashingTeam>();
 		washMachines = new Vector<WashingMachine>();
 		carsQueue = new Queue<Car>();
