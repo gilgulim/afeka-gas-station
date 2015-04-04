@@ -16,7 +16,7 @@ import bl.*;
 import Helpers.XMLParser;
 
 
-public class Program {
+public class Program extends Thread{
 
 	private static BlockingQueue<Car> blockingQueue;
 	
@@ -24,16 +24,28 @@ public class Program {
 		File file = new File("data.xml");
 		GasStation gasStation;
 		Vector<Car> carsVector;
+		AutoCleaningDispatcher cleaningTeamDispatcher;
 		
 		try {
 			GasStationXMLParserHandler gasStationXMLParser = new GasStationXMLParserHandler(file);
 			gasStation = gasStationXMLParser.parseToGasStation();
+			cleaningTeamDispatcher = new AutoCleaningDispatcher(gasStation);
+			cleaningTeamDispatcher.start();
 			carsVector = gasStationXMLParser.getCarsVector();
-		} catch (ParserConfigurationException | SAXException | IOException e) {
+			
+			for (int i=0; i<carsVector.size(); i++){
+				cleaningTeamDispatcher.addCarToAutoWashQueue(carsVector.elementAt(i));
+			}
+					
+			
+		} catch (ParserConfigurationException | SAXException | IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
 		
-		blockingQueueTest();
+		
+		
+		
+		//blockingQueueTest();
 		//TODO: start cleaning service
 		//TODO: start all pumps
 		//TODO: add cars to blocking queue
