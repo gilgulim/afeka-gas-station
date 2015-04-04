@@ -21,7 +21,7 @@ public class FuelRepository {
 	}
 	public synchronized void getOneLitterOfFuel() throws LowFuelAmountException
 	{
-		int lowCapacityBorder = LOW_BORDER_PERCENTAGE * maxCapacity; 
+		int lowCapacityBorder = LOW_BORDER_PERCENTAGE / 100 * maxCapacity; 
 		if(lowCapacityBorder >= currentCapacity){
 			currentCapacity--;
 			throw new LowFuelAmountException();
