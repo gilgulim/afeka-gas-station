@@ -11,6 +11,7 @@ public class CleaningTeamDispatcher extends Thread{
 	}
 
 	public synchronized Car getCarFromQueue(){
+		return null;
 		
 	}
 	

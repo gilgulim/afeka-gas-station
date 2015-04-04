@@ -1,42 +1,41 @@
 package bl;
 
+import bl.Exceptions.LowFuelAmountException;
+
 public class FuelRepository {
 
+	private final int LOW_BORDER_PERCENTAGE = 20;
 	private boolean isAvailable;
 	private int currentCapacity;
 	private int maxCapacity;
 	
 	public FuelRepository(int currentCapacity, int maxCapacity){
-		setCurrentCapacity(currentCapacity);
-		setMaxCapacity(maxCapacity);
-		setAvailable(true);
+		this.maxCapacity = maxCapacity;
+		this.currentCapacity = currentCapacity;
+		
+		if(maxCapacity > 0){
+			this.isAvailable = true;
+		}else{
+			this.isAvailable = false;
+		}
 	}
-	
-	public void decreaseFuelAmount(int amount){
-		//TODO: complete method - if decrease <0 throws exception;
+	public synchronized void getOneLitterOfFuel() throws LowFuelAmountException
+	{
+		int lowCapacityBorder = LOW_BORDER_PERCENTAGE * maxCapacity; 
+		if(lowCapacityBorder >= currentCapacity){
+			currentCapacity--;
+			throw new LowFuelAmountException();
+		}
+			
 	}
-	
-	public void increaseFuelAmount(int amount){
-		//TODO: complete method - if increase > maxCapacity throws exception;
-	}
-	
 	public boolean isAvailable() {
 		return isAvailable;
-	}
-	public void setAvailable(boolean isAvailable) {
-		this.isAvailable = isAvailable;
 	}
 	public int getCurrentCapacity() {
 		return currentCapacity;
 	}
-	public void setCurrentCapacity(int currentCapacity) {
-		this.currentCapacity = currentCapacity;
-	}
 	public int getMaxCapacity() {
 		return maxCapacity;
-	}
-	public void setMaxCapacity(int maxCapacity) {
-		this.maxCapacity = maxCapacity;
 	}
 	
 }

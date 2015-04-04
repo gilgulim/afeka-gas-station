@@ -1,9 +1,8 @@
 package bl;
-
-import java.util.Queue;
 import java.util.Vector;
 
 public class GasStation {
+	
 	private String name;
 	private Vector<FuelPump> pumps;
 	private CleaningServices cleaningSrv;
@@ -11,18 +10,16 @@ public class GasStation {
 	private float fuelPricePerLiter;
 	private int carWashPrice;
 	private int autoWashTimeToClean;
+	private int pumpingTimePerLitter;
 	
 	public GasStation (String name){
 		setName(name);
 		pumps = new Vector<FuelPump>();
 	}
 	
-	public void addCarToCleaningServiceQueue(Car car){
-		//TODO: fill method;
-	}
-	
-	public void addCarToFuelPumpsQueue(Car car){
-		//TODO: fill method;
+	public void AddCarDispatcherQueue(Car car){
+		
+		//TODO: Implement this method
 	}
 	
 	public void dissmissCarFromGasStation(Car car){
@@ -77,6 +74,9 @@ public class GasStation {
 	}
 	public void setAutoWashTimeToClean(int autoWashTimeToClean) {
 		this.autoWashTimeToClean = autoWashTimeToClean;
+	}
+	public int getPumpingTimePerLitter(){
+		return pumpingTimePerLitter;
 	}
 
 	@Override
