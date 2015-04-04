@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -21,20 +22,45 @@ public class Program {
 	private static BlockingQueue<Car> blockingQueue;
 	
 	public static void main(String[] args) {
-		
-		/*File file = new File("data.xml");
+		File file = new File("data.xml");
 		GasStation gasStation;
+		Vector<Car> carsVector;
 		
 		try {
 			GasStationXMLParserHandler gasStationXMLParser = new GasStationXMLParserHandler(file);
 			gasStation = gasStationXMLParser.parseToGasStation();
-			System.out.println(gasStation);
+			carsVector = gasStationXMLParser.getCarsVector();
 		} catch (ParserConfigurationException | SAXException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
+		
 		blockingQueueTest();
-
+		//TODO: start cleaning service
+		//TODO: start all pumps
+		//TODO: add cars to blocking queue
+	}
+	
+	public void carDispatcher(Car car){
+		Boolean isRequiredFuel = car.isRequiresFuel();
+		Boolean isRequiredWash = car.isRequiresWash();
+		
+		if (isRequiredFuel){
+			if(isRequiredWash){
+				//decide shortest option
+				//TODO: complete method;
+			}else{
+				//push to fuel queue
+				car.getGasStaion().addCarToFuelPumpsQueue(car);
+			}
+		}else if(isRequiredWash){
+			//push to wash queue
+			car.setRequiresWash(false);
+			car.getGasStaion().addCarToCleaningServiceQueue(car);
+		}else{
+			//exit gas station
+			car.getGasStaion().dissmissCarFromGasStation(car);
+			car.setGasStaion(null);
+		}
 	}
 	
 	

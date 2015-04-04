@@ -1,5 +1,15 @@
 package bl;
 
-public class CleaningTeamDispatcher {
+import java.util.concurrent.BlockingQueue;
 
+public class CleaningTeamDispatcher extends Thread{
+	private BlockingQueue<Car> autoWashQueue;
+	private int autoWashTimeToClean;
+	
+	public CleaningTeamDispatcher(){
+		
+	}
+	public void run(){
+		
+	}
 }
