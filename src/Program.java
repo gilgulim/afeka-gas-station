@@ -61,12 +61,12 @@ public class Program extends Thread{
 				//TODO: complete method;
 			}else{
 				//push to fuel queue
-				car.getGasStaion().addCarToFuelPumpsQueue(car);
+				//car.getGasStaion().addCarToFuelPumpsQueue(car);
 			}
 		}else if(isRequiredWash){
 			//push to wash queue
 			car.setRequiresWash(false);
-			car.getGasStaion().addCarToCleaningServiceQueue(car);
+			//car.getGasStaion().addCarToCleaningServiceQueue(car);
 		}else{
 			//exit gas station
 			car.getGasStaion().dissmissCarFromGasStation(car);

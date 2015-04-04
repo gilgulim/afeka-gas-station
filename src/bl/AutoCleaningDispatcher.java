@@ -1,19 +1,19 @@
 package bl;
 
-import Helpers.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class AutoCleaningDispatcher extends Thread{
-	private BlockingQueue<Car> autoWashQueue;
-	private BlockingQueue<Car> manualWashQueue;
-	private BlockingQueue<WashingTeam> washingTeamQueue;
+	private LinkedBlockingQueue<Car> autoWashQueue;
+	private LinkedBlockingQueue<Car> manualWashQueue;
+	private LinkedBlockingQueue<WashingTeam> washingTeamQueue;
 	private int autoWashTimeToClean;
 	private GasStation gasStation;
 	private static final int SECONDS = 1000; 
 	
 	public AutoCleaningDispatcher(GasStation gasStation){
-		autoWashQueue = new BlockingQueue<Car>();
-		manualWashQueue = new BlockingQueue<Car>();
-		washingTeamQueue = new BlockingQueue<WashingTeam>();
+		autoWashQueue = new LinkedBlockingQueue<Car>();
+		manualWashQueue = new LinkedBlockingQueue<Car>();
+		washingTeamQueue = new LinkedBlockingQueue<WashingTeam>();
 		
 		this.gasStation = gasStation;
 		autoWashTimeToClean = this.gasStation.getAutoWashTimeToClean();
