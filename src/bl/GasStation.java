@@ -88,6 +88,8 @@ public class GasStation implements Runnable {
 	@Override
 	public void run() {
 		
+		FuelPump fuelPump;
+		
 		while(isActive){
 			
 			try {
@@ -98,16 +100,44 @@ public class GasStation implements Runnable {
 					//If the car request both service make a decision about the fastest route
 					if(car.isRequiresFuel() && car.isRequiresWash()){
 						
+						fuelPump = getCarFuelPump(car);
+						if(fuelPump != null){
+							
+							int waitInPump = fuelPump.getLitersInQueue() *  pumpingPacePerLiter;
+							int waitInWash = 0;//TODO: cleaningSrv.getCurrentWaitingTime();
+							
+							if(waitInPump < waitInWash){
+								fuelPump.addCar(car);
+							}else{
+								//TODO: Implement the addCar method in the CleaningServices class
+								//cleaningSrv.addCar(car);
+							}
+							
+						}
+						else{
+							//TODO: Throw an exception or an error message to the log that there is no such pump.
+						}
+						
+						
 					}else if(car.isRequiresFuel()){ //Only fuel
 						
-						if (car.getPumpIndex() < pumpsVec.size()){
+						fuelPump = getCarFuelPump(car);
+						if(fuelPump != null){
+							 car.setRequiresFuel(false);
+							 fuelPump.addCar(car);
 							
 						}else{
 							//TODO: Throw an exception or an error message to the log that there is no such pump.
 						}
 						
-					}else{ //Only wash
+					}else if(car.isRequiresWash()){ //Only wash
 						
+						//TODO: Implement the addCar method in the CleaningServices class 
+						//cleaningSrv.addCar(car);
+						
+					}else{
+						
+						//Nothing is required the car is leaving the station.
 					}
 					
 				}
@@ -120,5 +150,14 @@ public class GasStation implements Runnable {
 			
 		}
 		
+	}
+	
+	
+	private FuelPump getCarFuelPump(Car car){
+		int pumpIndex = car.getPumpIndex();
+		if (pumpIndex < pumpsVec.size()){
+			return pumpsVec.get(pumpIndex);
+		}
+		return null;
 	}
 }

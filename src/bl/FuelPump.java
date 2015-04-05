@@ -12,6 +12,7 @@ public class FuelPump implements Runnable
 	private Thread pumpQueueThread;
 	private int id;
 	private boolean isActive;
+	private int currentLitersInQueue;
 	
 	
 	public FuelPump(){
@@ -19,11 +20,17 @@ public class FuelPump implements Runnable
 		isActive = false;
 		carsQueue = new LinkedBlockingQueue<Car>();
 		pumpQueueThread = new Thread(this);
+		currentLitersInQueue = 0;
 	}	
 	
-	public void addCar(Car car){
+	public int getLitersInQueue() {
+		return currentLitersInQueue;
+	}
+	
+	public synchronized void addCar(Car car){
 		try {
 			
+			currentLitersInQueue+=car.getFuelAmountRequired();
 			carsQueue.put(car);
 			
 		} catch (InterruptedException e) {
@@ -99,6 +106,7 @@ public class FuelPump implements Runnable
 						}
 					}
 					
+					currentLitersInQueue -= pumpingCar.getFuelAmountRequired();
 					
 					//Sending the car back to the gas station dispatcher
 					gasStation.AddCarDispatcherQueue(pumpingCar);
