@@ -1,13 +1,19 @@
 package bl;
 
+import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
+import loging.CustomFilter;
+import loging.CustomLogFormatter;
 import bl.Exceptions.LowFuelAmountException;
 
 
 public class FuelPump implements Runnable
 {
-	static private int idGenerator = 1;
+	private static Logger logger = Logger.getLogger("logger");
+	private static int idGenerator = 1;
 	private LinkedBlockingQueue<Car> carsQueue;
 	private Thread pumpQueueThread;
 	private int id;
@@ -21,6 +27,26 @@ public class FuelPump implements Runnable
 		carsQueue = new LinkedBlockingQueue<Car>();
 		pumpQueueThread = new Thread(this);
 		currentLitersInQueue = 0;
+		
+		//Init logger
+		FileHandler theFileHandler;
+		try {
+			
+			theFileHandler = new FileHandler(String.format("Pump_%d.txt", this.id), true);
+			theFileHandler.setFormatter(new CustomLogFormatter());
+			theFileHandler.setFilter(new CustomFilter(this, "id", id));
+			logger.addHandler(theFileHandler);
+			
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		
 	}	
 	
 	public int getLitersInQueue() {
@@ -52,6 +78,7 @@ public class FuelPump implements Runnable
 		if(!isActive){
 			isActive = true;
 			pumpQueueThread.start();
+			logger.info("FuelPump started");
 		}
 	}
 	
@@ -62,6 +89,8 @@ public class FuelPump implements Runnable
 			
 			//Releasing the blocking queue
 			carsQueue.notifyAll();
+			
+			logger.info("FuelPump closed");
 		}
 	}
 
@@ -83,6 +112,8 @@ public class FuelPump implements Runnable
 				//Will wait here if the queue is empty
 				Car pumpingCar = carsQueue.take();
 				if(pumpingCar != null){
+					
+					logger.info(String.format("Start fueling car: ", pumpingCar));
 					
 					fuelAmount = pumpingCar.getFuelAmountRequired();
 					gasStation = pumpingCar.getGasStaion();
@@ -109,6 +140,7 @@ public class FuelPump implements Runnable
 		
 					currentLitersInQueue -= pumpingCar.getFuelAmountRequired();
 					
+					logger.info(String.format("Finished fueling car: ", pumpingCar));
 					//Sending the car back to the gas station dispatcher
 					gasStation.AddCarDispatcherQueue(pumpingCar);	
 
