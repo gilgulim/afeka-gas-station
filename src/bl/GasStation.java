@@ -91,7 +91,7 @@ public class GasStation implements Runnable {
 		FuelPump fuelPump;
 		
 		while(isActive){
-			
+
 			try {
 				
 				Car car = dispachQueue.take();
@@ -107,7 +107,9 @@ public class GasStation implements Runnable {
 							int waitInWash = 0;//TODO: cleaningSrv.getCurrentWaitingTime();
 							
 							if(waitInPump < waitInWash){
+								
 								fuelPump.addCar(car);
+								
 							}else{
 								//TODO: Implement the addCar method in the CleaningServices class
 								//cleaningSrv.addCar(car);
@@ -123,12 +125,14 @@ public class GasStation implements Runnable {
 						
 						fuelPump = getCarFuelPump(car);
 						if(fuelPump != null){
-							 car.setRequiresFuel(false);
-							 fuelPump.addCar(car);
-							
+							 
+							car.setRequiresFuel(false);
+							fuelPump.addCar(car);
+							 
 						}else{
 							//TODO: Throw an exception or an error message to the log that there is no such pump.
 						}
+						
 						
 					}else if(car.isRequiresWash()){ //Only wash
 						
@@ -140,8 +144,8 @@ public class GasStation implements Runnable {
 						//Nothing is required the car is leaving the station.
 					}
 					
-				}
 				
+				}
 				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -149,11 +153,12 @@ public class GasStation implements Runnable {
 			}
 			
 		}
-		
+
 	}
 	
 	
 	private FuelPump getCarFuelPump(Car car){
+		
 		int pumpIndex = car.getPumpIndex();
 		if (pumpIndex < pumpsVec.size()){
 			return pumpsVec.get(pumpIndex);

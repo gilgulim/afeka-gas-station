@@ -31,6 +31,7 @@ public class FuelPump implements Runnable
 		try {
 			
 			currentLitersInQueue+=car.getFuelAmountRequired();
+
 			carsQueue.put(car);
 			
 		} catch (InterruptedException e) {
@@ -105,11 +106,12 @@ public class FuelPump implements Runnable
 							//TODO: Do something with this error. Maybe log?
 						}
 					}
-					
+		
 					currentLitersInQueue -= pumpingCar.getFuelAmountRequired();
 					
 					//Sending the car back to the gas station dispatcher
-					gasStation.AddCarDispatcherQueue(pumpingCar);
+					gasStation.AddCarDispatcherQueue(pumpingCar);	
+
 				}
 				
 			} catch (InterruptedException e) {
