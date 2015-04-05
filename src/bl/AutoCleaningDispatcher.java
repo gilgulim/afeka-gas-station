@@ -8,7 +8,7 @@ public class AutoCleaningDispatcher extends Thread{
 	private LinkedBlockingQueue<WashingTeam> washingTeamQueue;
 	private int autoWashTimeToClean;
 	private GasStation gasStation;
-	private static final int SECONDS = 1000; 
+
 	
 	public AutoCleaningDispatcher(GasStation gasStation){
 		autoWashQueue = new LinkedBlockingQueue<Car>();
@@ -16,6 +16,7 @@ public class AutoCleaningDispatcher extends Thread{
 		washingTeamQueue = new LinkedBlockingQueue<WashingTeam>();
 		
 		this.gasStation = gasStation;
+		autoWashTimeToClean = this.gasStation.getAutoWashTimeToClean();
 		for (int i=0; i<gasStation.getCleaningSrv().getWashTeams().size(); i++){
 			try {
 				washingTeamQueue.put(gasStation.getCleaningSrv().getWashTeams().elementAt(i));
@@ -46,10 +47,7 @@ public class AutoCleaningDispatcher extends Thread{
 		sleep(autoWashTimeToClean*SECONDS);
 	}
 	
-	private void manualWashCar(Car car) throws InterruptedException{
-		//Car car;
-		
-	}
+
 	
 	private Car getCarFromAutoWashQueue() throws InterruptedException{
 		return autoWashQueue.take();
@@ -65,5 +63,9 @@ public class AutoCleaningDispatcher extends Thread{
 	
 	private void addCarToManualWashQueue(Car car) throws InterruptedException{
 		manualWashQueue.put(car);
+	}
+	
+	private void manualWashCar(Car car) throws InterruptedException{
+		//Car car;	
 	}
 }
