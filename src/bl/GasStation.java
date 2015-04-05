@@ -80,10 +80,47 @@ public class GasStation {
 	}
 
 	@Override
+<<<<<<< HEAD
 	public String toString() {
 		return "GasStation [name=" + name + ", pumps=" + pumps + ", cleaningSrv=" + cleaningSrv + ", fuelRep="
 				+ fuelRep + ", fuelPricePerLiter=" + fuelPricePerLiter
 				+ ", carWashPrice=" + carWashPrice + ", autoWashTimeToClean="
 				+ autoWashTimeToClean + "]";
+=======
+	public void run() {
+		
+		while(isActive){
+			
+			try {
+				
+				Car car = dispachQueue.take();
+				if(car != null){
+					
+					//If the car request both service make a decision about the fastest route
+					if(car.isRequiresFuel() && car.isRequiresWash()){
+						
+					}else if(car.isRequiresFuel()){ //Only fuel
+						
+						if (car.getPumpIndex() < pumpsVec.size()){
+							
+						}else{
+							//TODO: Throw an exception or an error message to the log that there is no such pump.
+						}
+						
+					}else{ //Only wash
+						
+					}
+					
+				}
+				
+				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+>>>>>>> parent of 8d414da... Finished GasStation
 	}
 }

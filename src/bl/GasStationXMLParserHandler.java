@@ -129,6 +129,12 @@ public class GasStationXMLParserHandler {
 			gasStation.addPump(new FuelPump());
 		}
 		
+		/*String washPrice = xmlParser.getNodeAttr("washPrice", rootNode);
+		gasStation.setCarWashPrice(Integer.parseInt(washPrice));
+		
+		String secondsPerAutoClean = xmlParser.getNodeAttr("secondsPerAutoClean", rootNode);
+		gasStation.setAutoWashTimeToClean(Integer.parseInt(secondsPerAutoClean));*/
+		
 		NodeList rootEntitiesNodeList = rootNode.getChildNodes();
 		
 		Node fuelRepNode = xmlParser.getNode("MainFuelPool", rootEntitiesNodeList);

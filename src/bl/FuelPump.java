@@ -19,6 +19,20 @@ public class FuelPump implements Runnable
 		pumpQueueThread = new Thread(this);
 	}	
 	
+<<<<<<< HEAD
+=======
+	public void addCar(Car car){
+		try {
+			
+			carsQueue.put(car);
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+>>>>>>> parent of 8d414da... Finished GasStation
 	public int getId() {
 		return id;
 	}
@@ -81,6 +95,13 @@ public class FuelPump implements Runnable
 					}catch(LowFuelAmountException ex){
 						//TODO: Do something with this error. Maybe log?
 					}
+<<<<<<< HEAD
+=======
+					
+					
+					//Sending the car back to the gas station dispatcher
+					gasStation.AddCarDispatcherQueue(pumpingCar);
+>>>>>>> parent of 8d414da... Finished GasStation
 				}
 				
 				
