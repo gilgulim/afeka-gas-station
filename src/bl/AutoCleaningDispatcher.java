@@ -16,7 +16,7 @@ public class AutoCleaningDispatcher extends Thread{
 		washingTeamQueue = new LinkedBlockingQueue<WashingTeam>();
 		
 		this.gasStation = gasStation;
-		autoWashTimeToClean = this.gasStation.getAutoWashTimeToClean();
+		/*autoWashTimeToClean = this.gasStation.getAutoWashTimeToClean();
 		for (int i=0; i<gasStation.getCleaningSrv().getWashTeams().size(); i++){
 			try {
 				washingTeamQueue.put(gasStation.getCleaningSrv().getWashTeams().elementAt(i));
@@ -24,7 +24,7 @@ public class AutoCleaningDispatcher extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
+		}*/
 	}
 	
 	public void run(){
@@ -44,7 +44,7 @@ public class AutoCleaningDispatcher extends Thread{
 	}
 
 	private void autoWashCar(Car car) throws InterruptedException{
-		sleep(autoWashTimeToClean*SECONDS);
+		//sleep(autoWashTimeToClean*SECONDS);
 	}
 	
 

@@ -1,20 +1,48 @@
 package bl;
 import java.util.Vector;
+import java.util.concurrent.LinkedBlockingDeque;
 
-public class GasStation {
+public class GasStation implements Runnable {
 	
 	private String name;
-	private Vector<FuelPump> pumps;
+	private float fuelPricePerLiter;
+	private int pumpingPacePerLiter;
+	private Vector<FuelPump> pumpsVec;
+	
 	private CleaningServices cleaningSrv;
 	private FuelRepository fuelRep;
-	private float fuelPricePerLiter;
-	private int carWashPrice;
-	private int autoWashTimeToClean;
-	private int pumpingTimePerLitter;
+	private LinkedBlockingDeque<Car> dispachQueue;
 	
-	public GasStation (String name){
-		setName(name);
-		pumps = new Vector<FuelPump>();
+	private Thread carsDispatchThread;
+	private boolean isActive;
+	
+	
+	public GasStation (String name, float fuelPricePerLiter, int pumpingPacePerLiter){
+		this.name = name;
+		this.fuelPricePerLiter = fuelPricePerLiter;
+		this.pumpingPacePerLiter = pumpingPacePerLiter;
+		this.isActive = false;
+		
+		pumpsVec = new Vector<FuelPump>();
+		
+		carsDispatchThread = new Thread(this);
+		carsDispatchThread.setName("CarsDispatchThread");
+		
+		dispachQueue = new LinkedBlockingDeque<Car>();
+	}
+	
+	public void startGasStation(){
+		if(!isActive){
+			isActive = true;
+			carsDispatchThread.start();
+		}
+	}
+	
+	public void stopGasStation(){
+		if(isActive){
+			isActive = false;
+			
+		}
 	}
 	
 	public void AddCarDispatcherQueue(Car car){
@@ -22,35 +50,22 @@ public class GasStation {
 		//TODO: Implement this method
 	}
 	
-	public void dissmissCarFromGasStation(Car car){
-		//TODO: fill method;
-	}
-	
 	public void addPump(FuelPump fp){
-		pumps.add(fp);
+		pumpsVec.add(fp);
 	}
 	
 	public void setCleanSrv(CleaningServices cs){
 		setCleaningSrv(cs);
 	}
-	
 	public String getName() {
 		return name;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public Vector<FuelPump> getPumps() {
-		return pumps;
-	}
-
 	public FuelRepository getFuelRep() {
 		return fuelRep;
 	}
 	public void setFuelRep(FuelRepository fuelRep) {
 		this.fuelRep = fuelRep;
 	}
-	
 	public CleaningServices getCleaningSrv() {
 		return cleaningSrv;
 	}
@@ -60,30 +75,89 @@ public class GasStation {
 	public float getFuelPricePerLiter() {
 		return fuelPricePerLiter;
 	}
-	public void setFuelPricePerLiter(float f) {
-		this.fuelPricePerLiter = f;
-	}
-	public int getCarWashPrice() {
-		return carWashPrice;
-	}
-	public void setCarWashPrice(int carWashPrice) {
-		this.carWashPrice = carWashPrice;
-	}
-	public int getAutoWashTimeToClean() {
-		return autoWashTimeToClean;
-	}
-	public void setAutoWashTimeToClean(int autoWashTimeToClean) {
-		this.autoWashTimeToClean = autoWashTimeToClean;
-	}
-	public int getPumpingTimePerLitter(){
-		return pumpingTimePerLitter;
+	public int getPumpingPacePerLiter(){
+		return pumpingPacePerLiter;
 	}
 
 	@Override
 	public String toString() {
-		return "GasStation [name=" + name + ", pumps=" + pumps + ", cleaningSrv=" + cleaningSrv + ", fuelRep="
-				+ fuelRep + ", fuelPricePerLiter=" + fuelPricePerLiter
-				+ ", carWashPrice=" + carWashPrice + ", autoWashTimeToClean="
-				+ autoWashTimeToClean + "]";
+		return "GasStation [name=" + name + ", pumps=" + pumpsVec + ", cleaningSrv=" + cleaningSrv + ", fuelRep="
+				+ fuelRep + ", fuelPricePerLiter=" + fuelPricePerLiter + "]";
+	}
+
+	@Override
+	public void run() {
+		
+		FuelPump fuelPump;
+		
+		while(isActive){
+			
+			try {
+				
+				Car car = dispachQueue.take();
+				if(car != null){
+					
+					//If the car request both service make a decision about the fastest route
+					if(car.isRequiresFuel() && car.isRequiresWash()){
+						
+						fuelPump = getCarFuelPump(car);
+						if(fuelPump != null){
+							
+							int waitInPump = fuelPump.getLitersInQueue() *  pumpingPacePerLiter;
+							int waitInWash = 0;//TODO: cleaningSrv.getCurrentWaitingTime();
+							
+							if(waitInPump < waitInWash){
+								fuelPump.addCar(car);
+							}else{
+								//TODO: Implement the addCar method in the CleaningServices class
+								//cleaningSrv.addCar(car);
+							}
+							
+						}
+						else{
+							//TODO: Throw an exception or an error message to the log that there is no such pump.
+						}
+						
+						
+					}else if(car.isRequiresFuel()){ //Only fuel
+						
+						fuelPump = getCarFuelPump(car);
+						if(fuelPump != null){
+							 car.setRequiresFuel(false);
+							 fuelPump.addCar(car);
+							
+						}else{
+							//TODO: Throw an exception or an error message to the log that there is no such pump.
+						}
+						
+					}else if(car.isRequiresWash()){ //Only wash
+						
+						//TODO: Implement the addCar method in the CleaningServices class 
+						//cleaningSrv.addCar(car);
+						
+					}else{
+						
+						//Nothing is required the car is leaving the station.
+					}
+					
+				}
+				
+				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
+	
+	
+	private FuelPump getCarFuelPump(Car car){
+		int pumpIndex = car.getPumpIndex();
+		if (pumpIndex < pumpsVec.size()){
+			return pumpsVec.get(pumpIndex);
+		}
+		return null;
 	}
 }
