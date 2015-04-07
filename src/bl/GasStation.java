@@ -107,10 +107,11 @@ public class GasStation implements Runnable {
 							int waitInWash = cleaningSrv.getCurrentWaitingTime();
 							
 							if(waitInPump < waitInWash){
-								
+								car.setRequiresFuel(false);
 								fuelPump.addCar(car);
 								
 							}else{
+								car.setRequiresWash(false);
 								cleaningSrv.addCarToAutoWashQueue(car);
 							}
 							
@@ -134,10 +135,8 @@ public class GasStation implements Runnable {
 						
 						
 					}else if(car.isRequiresWash()){ //Only wash
-						
-						//TODO: Implement the addCar method in the CleaningServices class 
-						//cleaningSrv.addCar(car);
-						
+						car.setRequiresWash(false);
+						cleaningSrv.addCarToAutoWashQueue(car);
 					}else{
 						
 						//Nothing is required the car is leaving the station.
