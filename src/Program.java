@@ -24,21 +24,15 @@ public class Program extends Thread{
 		File file = new File("data.xml");
 		GasStation gasStation;
 		Vector<Car> carsVector;
-		AutoCleaningDispatcher cleaningTeamDispatcher;
 		
 		try {
 			GasStationXMLParserHandler gasStationXMLParser = new GasStationXMLParserHandler(file);
 			gasStation = gasStationXMLParser.parseToGasStation();
-			cleaningTeamDispatcher = new AutoCleaningDispatcher(gasStation);
-			cleaningTeamDispatcher.start();
+
 			carsVector = gasStationXMLParser.getCarsVector();
-			
-			for (int i=0; i<carsVector.size(); i++){
-				cleaningTeamDispatcher.addCarToAutoWashQueue(carsVector.elementAt(i));
-			}
 					
 			
-		} catch (ParserConfigurationException | SAXException | IOException | InterruptedException e) {
+		} catch (ParserConfigurationException | SAXException | IOException e) {
 			e.printStackTrace();
 		}
 		

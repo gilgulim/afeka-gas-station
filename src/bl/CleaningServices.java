@@ -3,7 +3,6 @@ package bl;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class CleaningServices implements Runnable{
-	private static final int SECONDS = 1000;
 	private LinkedBlockingQueue<WashingTeam> washTeamsQueue;
 	private LinkedBlockingQueue<WashingMachine> washMachinesQueue;
 	private LinkedBlockingQueue<Car> autoWashCarsQueue;
@@ -30,7 +29,7 @@ public class CleaningServices implements Runnable{
 		Car car;
 		
 		try {
-			while(true){
+			while(isActive){
 			car = getCarFromAutoWashQueue();
 			autoWashCar(car);
 			addCarToManualWashQueue(car);
@@ -57,8 +56,9 @@ public class CleaningServices implements Runnable{
 	}
 
 	
+	
 	private void autoWashCar(Car car) throws InterruptedException{
-		Thread.sleep(autoWashTime*SECONDS);
+		Thread.sleep(autoWashTime);
 	}
 	
 	private Car getCarFromAutoWashQueue() throws InterruptedException{
