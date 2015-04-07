@@ -32,7 +32,7 @@ public class Program extends Thread{
 			carsVector = gasStationXMLParser.getCarsVector();
 					
 			
-		} catch (ParserConfigurationException | SAXException | IOException e) {
+		} catch (ParserConfigurationException | SAXException | IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
 		

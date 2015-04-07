@@ -3,25 +3,26 @@ package bl;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class CleaningServices implements Runnable{
-	private LinkedBlockingQueue<WashingTeam> washTeamsQueue;
+	private ManualWashManager manualCleanMngr;
+	private CleaningTeamsManager cleanTeamMngr;
 	private LinkedBlockingQueue<WashingMachine> washMachinesQueue;
 	private LinkedBlockingQueue<Car> autoWashCarsQueue;
-	private LinkedBlockingQueue<Car> manualWashCarsQueue;
 	private int carWashPrice;
 	private int autoWashTime;
 	private Thread autoWashDispatcherThread;
 	private boolean isActive;
 	
+	
 	public CleaningServices(int carWashPrice, int autoWashTime){
+		cleanTeamMngr = new CleaningTeamsManager(this);
+		manualCleanMngr = new ManualWashManager(this, cleanTeamMngr);
 		autoWashDispatcherThread = new Thread(this);
 		
 		this.carWashPrice = carWashPrice;
 		this.autoWashTime = autoWashTime;
 
-		washTeamsQueue = new LinkedBlockingQueue<WashingTeam>();
 		washMachinesQueue = new LinkedBlockingQueue<WashingMachine>();
 		autoWashCarsQueue = new LinkedBlockingQueue<Car>();
-		manualWashCarsQueue = new LinkedBlockingQueue<Car>();
 	}
 	
 	@Override
@@ -32,7 +33,7 @@ public class CleaningServices implements Runnable{
 			while(isActive){
 			car = getCarFromAutoWashQueue();
 			autoWashCar(car);
-			addCarToManualWashQueue(car);
+			manualCleanMngr.addCarToQueue(car);
 			}
 			
 		} catch (InterruptedException e) {
@@ -41,8 +42,8 @@ public class CleaningServices implements Runnable{
 		}
 		
 	}
-	public void addWashTeam(WashingTeam wt){
-		washTeamsQueue.add(wt);
+	public void addWashTeam(WashingTeam washingTeam) throws InterruptedException{
+		cleanTeamMngr.addTeamToQueue(washingTeam);
 	}
 	
 	public void addWashMachine(WashingMachine wm){
@@ -51,12 +52,9 @@ public class CleaningServices implements Runnable{
 
 	@Override
 	public String toString() {
-		return "CleaningServices [washTeams=" + washTeamsQueue + ", washMachines="
-				+ washMachinesQueue + ", carsQueue=" + autoWashCarsQueue + "]";
+		return "CleaningServices [washTeams=" + washMachinesQueue + ", carsQueue=" + autoWashCarsQueue + "]";
 	}
 
-	
-	
 	private void autoWashCar(Car car) throws InterruptedException{
 		Thread.sleep(autoWashTime);
 	}
@@ -67,17 +65,5 @@ public class CleaningServices implements Runnable{
 	
 	public void addCarToAutoWashQueue(Car car) throws InterruptedException{
 		autoWashCarsQueue.put(car);
-	}
-
-	private Car getCarFromManualWashQueue() throws InterruptedException{
-		return manualWashCarsQueue.take();
-	}
-	
-	private void addCarToManualWashQueue(Car car) throws InterruptedException{
-		manualWashCarsQueue.put(car);
-	}
-	
-	private void manualWashCar(Car car) throws InterruptedException{
-		//Car car;	
 	}
 }

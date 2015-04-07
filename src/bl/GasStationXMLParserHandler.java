@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -32,7 +33,7 @@ public class GasStationXMLParserHandler {
 	}
 	
 	
-	public CleaningServices parseToCleanSrv(Node cleanSrvNode){
+	public CleaningServices parseToCleanSrv(Node cleanSrvNode) throws InterruptedException{
 		String washPriceStr = xmlParser.getNodeAttr("washPrice", cleanSrvNode);
 		String autoWashTimeStr = xmlParser.getNodeAttr("autoWashTime", cleanSrvNode);
 		
@@ -103,7 +104,7 @@ public class GasStationXMLParserHandler {
 		return car;
 	}
 	
-	public GasStation parseToGasStation() {
+	public GasStation parseToGasStation() throws InterruptedException {
 		Node rootNode = xmlParser.getNode("GasStation", xmlParser.getChildNode());
 		String gasStationName = xmlParser.getNodeAttr("name", rootNode);
 		
