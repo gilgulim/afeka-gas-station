@@ -3,26 +3,25 @@ package bl;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class CleaningServices implements Runnable{
-	private ManualWashManager manualCleanMngr;
 	private CleaningTeamsManager cleanTeamMngr;
-	private LinkedBlockingQueue<WashingMachine> washMachinesQueue;
 	private LinkedBlockingQueue<Car> autoWashCarsQueue;
+	private LinkedBlockingQueue<Car> manualWascarsQueue;
 	private int carWashPrice;
 	private int autoWashTime;
-//	private Thread autoWashDispatcherThread;
+	private Thread autoWashQueueThread;
 	private boolean isActive;
 	
 	
 	public CleaningServices(int carWashPrice, int autoWashTime){
-		manualCleanMngr = new ManualWashManager(this);
-		cleanTeamMngr = new CleaningTeamsManager(this, manualCleanMngr);
-//		autoWashDispatcherThread = new Thread(this);
+		cleanTeamMngr = new CleaningTeamsManager(this);
+		autoWashQueueThread = new Thread(this);
 		
 		this.carWashPrice = carWashPrice;
 		this.autoWashTime = autoWashTime;
 
-		washMachinesQueue = new LinkedBlockingQueue<WashingMachine>();
 		autoWashCarsQueue = new LinkedBlockingQueue<Car>();
+		manualWascarsQueue = new LinkedBlockingQueue<Car>();
+		
 	}
 	
 	@Override
@@ -31,9 +30,11 @@ public class CleaningServices implements Runnable{
 		
 		try {
 			while(isActive){
-			car = getCarFromAutoWashQueue();
-			autoWashCar(car);
-			manualCleanMngr.addCarToQueue(car);
+				car = autoWashCarsQueue.take();
+				if(car != null){
+					sendCarToAutoWash(car);
+					manualWascarsQueue.put(car);
+				}
 			}
 			
 		} catch (InterruptedException e) {
@@ -42,27 +43,30 @@ public class CleaningServices implements Runnable{
 		}
 		
 	}
+	
+	public void startCleaningSrv(){
+		if(!isActive){
+			isActive = true;
+			autoWashQueueThread.start();
+		}
+	}
+	
+	public void stopCleaningSrv(){
+		if(isActive){
+			isActive = false;
+			autoWashCarsQueue.notifyAll();
+		}
+	}
+	
 	public void addWashTeam(WashingTeam washingTeam) throws InterruptedException{
 		cleanTeamMngr.addTeamToQueue(washingTeam);
 	}
 	
-	public void addWashMachine(WashingMachine wm){
-		washMachinesQueue.add(wm);
-	}
 
-	@Override
-	public String toString() {
-		return "CleaningServices [washTeams=" + washMachinesQueue + ", carsQueue=" + autoWashCarsQueue + "]";
-	}
-
-	private void autoWashCar(Car car) throws InterruptedException{
+	private void sendCarToAutoWash(Car car) throws InterruptedException{
 		Thread.sleep(autoWashTime);
 	}
-	
-	private Car getCarFromAutoWashQueue() throws InterruptedException{
-		return autoWashCarsQueue.take();
-	}
-	
+		
 	public void addCarToAutoWashQueue(Car car) throws InterruptedException{
 		autoWashCarsQueue.put(car);
 	}
@@ -71,12 +75,32 @@ public class CleaningServices implements Runnable{
 		int result, autoWashQueueSize, manualWashQueueSize, autoWashTime, manualWashTime, teamsQueueSize;
 		
 		autoWashQueueSize = autoWashCarsQueue.size();
-		manualWashQueueSize = manualCleanMngr.getCarsQueue().size();
+		manualWashQueueSize = getCarsQueue().size();
 		teamsQueueSize = cleanTeamMngr.getTeamsQueue().size();
 		autoWashTime = this.autoWashTime;
 		manualWashTime = CleaningTeamsManager.getManualWashTime();
 		
 		result = (autoWashQueueSize * autoWashTime) + (manualWashQueueSize / teamsQueueSize)*manualWashTime;
 		return result;
+	}
+
+	protected Car getCarFromQueue() throws InterruptedException{
+		return manualWascarsQueue.take();
+	}
+	
+	protected void addCarToQueue(Car car) throws InterruptedException{
+		manualWascarsQueue.put(car);
+	}
+
+	public LinkedBlockingQueue<Car> getCarsQueue() {
+		return manualWascarsQueue;
+	}
+
+	public CleaningTeamsManager getCleanTeamMngr() {
+		return cleanTeamMngr;
+	}
+	
+	public boolean isActive() {
+		return isActive;
 	}
 }

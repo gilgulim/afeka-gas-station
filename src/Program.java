@@ -31,47 +31,36 @@ public class Program extends Thread{
 
 			carsVector = gasStationXMLParser.getCarsVector();
 					
-			
+			cleanSrvTest(gasStation, carsVector);
 		} catch (ParserConfigurationException | SAXException | IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
 		
 		
 		
-		cleanSrvTest();
+		
 		//blockingQueueTest();
 		//TODO: start cleaning service
 		//TODO: start all pumps
 		//TODO: add cars to blocking queue
 	}
 	
-	private static void cleanSrvTest() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void carDispatcher(Car car){
-		Boolean isRequiredFuel = car.isRequiresFuel();
-		Boolean isRequiredWash = car.isRequiresWash();
-		
-		if (isRequiredFuel){
-			if(isRequiredWash){
-				//decide shortest option
-				//TODO: complete method;
-			}else{
-				//push to fuel queue
-				//car.getGasStaion().addCarToFuelPumpsQueue(car);
-			}
-		}else if(isRequiredWash){
-			//push to wash queue
-			car.setRequiresWash(false);
-			//car.getGasStaion().addCarToCleaningServiceQueue(car);
-		}else{
-			//exit gas station
-			car.setGasStaion(null);
+	public static void cleanSrvTest(GasStation gasStation, Vector<Car> carsVector) throws InterruptedException {
+		for(int i=0; i<carsVector.size(); i++){
+			gasStation.getCleaningSrv().addCarToAutoWashQueue(carsVector.get(i));
 		}
-	}
-	
+		CleaningServices cleanSrv = gasStation.getCleaningSrv();
+		Runnable rCleanSrv = cleanSrv;
+		Thread tCleanSrv = new Thread(rCleanSrv);
+		tCleanSrv.start();
+		CleaningTeamsManager cleanTeamMngr = cleanSrv.getCleanTeamMngr();
+		Runnable rCleanTeamMngr = cleanTeamMngr;
+		Thread tCleanTeamMngr = new Thread(rCleanTeamMngr);
+		tCleanTeamMngr.start();
+		tCleanSrv.start();
+		
+				
+	}	
 	
 	public static void blockingQueueTest(){
 		
