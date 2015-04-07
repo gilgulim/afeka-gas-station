@@ -104,7 +104,7 @@ public class GasStation implements Runnable {
 						if(fuelPump != null){
 							
 							int waitInPump = fuelPump.getLitersInQueue() *  pumpingPacePerLiter;
-							int waitInWash = 0;//TODO: cleaningSrv.getCurrentWaitingTime();
+							int waitInWash = cleaningSrv.getCurrentWaitingTime();
 							
 							if(waitInPump < waitInWash){
 								

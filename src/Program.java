@@ -38,13 +38,18 @@ public class Program extends Thread{
 		
 		
 		
-		
+		cleanSrvTest();
 		//blockingQueueTest();
 		//TODO: start cleaning service
 		//TODO: start all pumps
 		//TODO: add cars to blocking queue
 	}
 	
+	private static void cleanSrvTest() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public void carDispatcher(Car car){
 		Boolean isRequiredFuel = car.isRequiresFuel();
 		Boolean isRequiredWash = car.isRequiresWash();

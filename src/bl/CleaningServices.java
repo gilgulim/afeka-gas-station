@@ -9,14 +9,14 @@ public class CleaningServices implements Runnable{
 	private LinkedBlockingQueue<Car> autoWashCarsQueue;
 	private int carWashPrice;
 	private int autoWashTime;
-	private Thread autoWashDispatcherThread;
+//	private Thread autoWashDispatcherThread;
 	private boolean isActive;
 	
 	
 	public CleaningServices(int carWashPrice, int autoWashTime){
-		cleanTeamMngr = new CleaningTeamsManager(this);
-		manualCleanMngr = new ManualWashManager(this, cleanTeamMngr);
-		autoWashDispatcherThread = new Thread(this);
+		manualCleanMngr = new ManualWashManager(this);
+		cleanTeamMngr = new CleaningTeamsManager(this, manualCleanMngr);
+//		autoWashDispatcherThread = new Thread(this);
 		
 		this.carWashPrice = carWashPrice;
 		this.autoWashTime = autoWashTime;
@@ -65,5 +65,18 @@ public class CleaningServices implements Runnable{
 	
 	public void addCarToAutoWashQueue(Car car) throws InterruptedException{
 		autoWashCarsQueue.put(car);
+	}
+	
+	public int getCurrentWaitingTime(){
+		int result, autoWashQueueSize, manualWashQueueSize, autoWashTime, manualWashTime, teamsQueueSize;
+		
+		autoWashQueueSize = autoWashCarsQueue.size();
+		manualWashQueueSize = manualCleanMngr.getCarsQueue().size();
+		teamsQueueSize = cleanTeamMngr.getTeamsQueue().size();
+		autoWashTime = this.autoWashTime;
+		manualWashTime = CleaningTeamsManager.getManualWashTime();
+		
+		result = (autoWashQueueSize * autoWashTime) + (manualWashQueueSize / teamsQueueSize)*manualWashTime;
+		return result;
 	}
 }

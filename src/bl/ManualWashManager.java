@@ -2,33 +2,27 @@ package bl;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class ManualWashManager implements Runnable{
+public class ManualWashManager{
 
 	private CleaningServices cleaningServices;
-	private CleaningTeamsManager cleanTeamsMngr;
 	private LinkedBlockingQueue<Car> carsQueue;
 	
-	
-	public ManualWashManager(CleaningServices cleaningServices, CleaningTeamsManager cleanTeamsMngr) {
+	public ManualWashManager(CleaningServices cleaningServices) {
 		this.cleaningServices = cleaningServices; 
-		this.cleanTeamsMngr = cleanTeamsMngr;
 		
 		carsQueue = new LinkedBlockingQueue<Car>();
 	}
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
 	
-	private Car getCarFromQueue() throws InterruptedException{
+	protected Car getCarFromQueue() throws InterruptedException{
 		return carsQueue.take();
 	}
 	
 	protected void addCarToQueue(Car car) throws InterruptedException{
 		carsQueue.put(car);
 	}
-	
 
-	
+	public LinkedBlockingQueue<Car> getCarsQueue() {
+		return carsQueue;
+	}
+
 }
