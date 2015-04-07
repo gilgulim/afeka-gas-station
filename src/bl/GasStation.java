@@ -111,8 +111,7 @@ public class GasStation implements Runnable {
 								fuelPump.addCar(car);
 								
 							}else{
-								//TODO: Implement the addCar method in the CleaningServices class
-								//cleaningSrv.addCar(car);
+								cleaningSrv.addCarToAutoWashQueue(car);
 							}
 							
 						}
