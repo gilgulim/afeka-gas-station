@@ -16,7 +16,6 @@ public class GasStation implements Runnable {
 	private float fuelPricePerLiter;
 	private int pumpingPacePerLiter;
 	private Vector<FuelPump> pumpsVec;
-	
 	private CleaningServices cleaningSrv;
 	private FuelRepository fuelRep;
 	private LinkedBlockingDeque<Car> dispachQueue;
@@ -32,12 +31,12 @@ public class GasStation implements Runnable {
 		this.isActive = false;
 		
 		pumpsVec = new Vector<FuelPump>();
+		dispachQueue = new LinkedBlockingDeque<Car>();
 		
 		carsDispatchThread = new Thread(this);
 		carsDispatchThread.setName("CarsDispatchThread");
 		
-		dispachQueue = new LinkedBlockingDeque<Car>();
-		
+		//Setting main log file handler
 		FileHandler theFileHandler;
 		try {
 			
@@ -56,8 +55,24 @@ public class GasStation implements Runnable {
 	
 	public void startGasStation(){
 		if(!isActive){
+			
+			logger.info("Gas-Station started.");
+			
 			isActive = true;
+			//Starting the main car dispatcher thread
 			carsDispatchThread.start();
+			
+			
+			//Starting each fuel pump
+			for(FuelPump fuelPump : pumpsVec){
+				fuelPump.startFuelPump();
+			}
+			
+			/*
+			//Starting the cleaning services
+			if(cleaningSrv != null){
+				cleaningSrv.startCleaningSrv();
+			}*/
 		}
 	}
 	
@@ -69,8 +84,8 @@ public class GasStation implements Runnable {
 	}
 	
 	public void AddCarDispatcherQueue(Car car){
-		
-		//TODO: Implement this method
+		logger.info(String.format("Car added to main queue: %s", car));
+		dispachQueue.add(car);
 	}
 	
 	public void addPump(FuelPump fp){
@@ -129,7 +144,7 @@ public class GasStation implements Runnable {
 							int waitInPump = fuelPump.getLitersInQueue() *  pumpingPacePerLiter;
 							int waitInWash = cleaningSrv.getCurrentWaitingTime();
 							
-							if(waitInPump < waitInWash){
+							if(waitInPump <= waitInWash){
 								car.setRequiresFuel(false);
 								fuelPump.addCar(car);
 								

@@ -57,4 +57,9 @@ public class Car {
 		this.gasStaion = gasStaion;
 	}
 	
+	@Override
+	public String toString(){
+		return "Car[FuelAmountRequired: " + fuelAmountRequired +" PumpIndex: "+ pumpIndex + " ReqFuel: " + isRequiresFuel + " ReqWash: " + isRequiresWash + "]";
+	}
+	
 }

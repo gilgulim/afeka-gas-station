@@ -9,7 +9,7 @@ public class FuelRepository {
 	
 	private static Logger logger = Logger.getLogger("logger");
 	
-	private final int LOW_BORDER_PERCENTAGE = 20;
+	private final float LOW_BORDER_PERCENTAGE = 20;
 	private boolean isAvailable;
 	private int currentCapacity;
 	private int maxCapacity;
@@ -23,16 +23,19 @@ public class FuelRepository {
 		}else{
 			this.isAvailable = false;
 		}
+		
+		logger.info("Fuel-Repository started.");
 	}
 	public synchronized void getOneLitterOfFuel() throws LowFuelAmountException, FuelRepositoryEmptyException
 	{
-		int lowCapacityBorder = LOW_BORDER_PERCENTAGE / 100 * maxCapacity;
+		float lowCapacityBorder = (float)(LOW_BORDER_PERCENTAGE / 100 * maxCapacity);
 		if(currentCapacity > 0){
 			if(lowCapacityBorder >= currentCapacity){
-				currentCapacity--;
 				logger.warning("Fuel amount in fuel repository is lower than: " + lowCapacityBorder);
+				currentCapacity--;
 				throw new LowFuelAmountException();
 			}
+			currentCapacity--;
 		}else{
 			logger.warning("Fuel repository is empty!");
 			throw new FuelRepositoryEmptyException();

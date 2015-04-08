@@ -46,8 +46,6 @@ public class FuelPump implements Runnable
 			e.printStackTrace();
 		}
 
-		
-		
 	}	
 	
 	public int getLitersInQueue() {
@@ -103,24 +101,26 @@ public class FuelPump implements Runnable
 	@Override
 	public void run() {
 		
-		int fuelAmount;
+		int fuelPumped, carFuelRequest;
 		GasStation gasStation;
 		FuelRepository fuelRep;
 		while(isActive){
 			
 			try {
 				
+				
 				//Will wait here if the queue is empty
 				Car pumpingCar = carsQueue.take();
 				if(pumpingCar != null){
 					
-					logger.info(String.format("Start fueling car: ", pumpingCar));
+					logger.info(String.format("Start fueling car: %s", pumpingCar));
 					
-					fuelAmount = pumpingCar.getFuelAmountRequired();
+					fuelPumped = 0;
+					carFuelRequest = pumpingCar.getFuelAmountRequired();
 					gasStation = pumpingCar.getGasStaion();
 					fuelRep = gasStation.getFuelRep();
 					
-					while(fuelAmount > 0){
+					while(fuelPumped < carFuelRequest){
 						
 						try{
 							
@@ -132,7 +132,7 @@ public class FuelPump implements Runnable
 							Thread.sleep(gasStation.getPumpingPacePerLiter());
 							
 							//Decrease the amount of left fuel by one litter
-							--fuelAmount;
+							++fuelPumped;
 							
 						}catch(LowFuelAmountException ex){
 							
@@ -142,9 +142,11 @@ public class FuelPump implements Runnable
 						}
 					}
 		
-					currentLitersInQueue -= pumpingCar.getFuelAmountRequired();
+					currentLitersInQueue -= fuelPumped;
+					pumpingCar.setFuelAmountRequired(carFuelRequest - fuelPumped);
 					
-					logger.info(String.format("Finished fueling car: ", pumpingCar));
+					logger.info(String.format("Finished fueling car: %s", pumpingCar));
+					
 					//Sending the car back to the gas station dispatcher
 					gasStation.AddCarDispatcherQueue(pumpingCar);	
 

@@ -48,6 +48,8 @@ public class CleaningServices implements Runnable{
 		if(!isActive){
 			isActive = true;
 			autoWashQueueThread.start();
+			
+			cleanTeamMngr.startCleaningTeam();
 		}
 	}
 	

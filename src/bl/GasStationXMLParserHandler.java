@@ -2,8 +2,6 @@ package bl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
-
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Node;
@@ -15,11 +13,9 @@ import Helpers.XMLParser;
 public class GasStationXMLParserHandler {
 	private XMLParser xmlParser;
 	private GasStation gasStation;
-	private Vector<Car> carsVector;
 	
 	public GasStationXMLParserHandler(File xmlFile) throws ParserConfigurationException, SAXException, IOException{
 		xmlParser = new XMLParser(xmlFile);
-		carsVector = new Vector<Car>();
 	}
 
 	public FuelRepository parseToFuelRepository(Node fuelRepNode){
@@ -84,14 +80,15 @@ public class GasStationXMLParserHandler {
 		if (wantClean != ""){
 			wantCleanBool = Boolean.parseBoolean(wantClean);
 		}
-				
-		if (wantFuelNodeList.getLength() != 0){
+		if(wantFuelNodeList.getLength()>0){
 			wantFuelBool = true;
 		}
 		
 		car = new Car(Integer.parseInt(carId), wantCleanBool, wantFuelBool,null);
 		
-		for (int j=0; j<wantFuelNodeList.getLength(); j++){
+		for(int j=0; j<wantFuelNodeList.getLength(); j++){
+			wantFuelBool = true;
+			String str = wantFuelNodeList.item(j).getNodeName();
 			if(wantFuelNodeList.item(j).getNodeName().equals("WantsFuel")){
 				Node wantFuelNode = xmlParser.getNodeByIndex(wantFuelNodeList, j);
 				String numOfLiters = xmlParser.getNodeAttr("numOfLiters", wantFuelNode);
@@ -139,13 +136,9 @@ public class GasStationXMLParserHandler {
 				Node carNode = xmlParser.getNodeByIndex(carNodeList, i);
 				Car car = parseToCar(carNode);
 				car.setGasStaion(gasStation);
-				carsVector.addElement(car);
+				gasStation.AddCarDispatcherQueue(car);
 			}
 		}	
 		return gasStation;
-	}
-
-	public Vector<Car> getCarsVector() {
-		return carsVector;
 	}
 }

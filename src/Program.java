@@ -18,33 +18,23 @@ import Helpers.XMLParser;
 
 public class Program extends Thread{
 
-	private static BlockingQueue<Car> blockingQueue;
+	//private static BlockingQueue<Car> blockingQueue;
 	
 	public static void main(String[] args) {
 		File file = new File("data.xml");
 		GasStation gasStation;
-		Vector<Car> carsVector;
 		
 		try {
 			GasStationXMLParserHandler gasStationXMLParser = new GasStationXMLParserHandler(file);
 			gasStation = gasStationXMLParser.parseToGasStation();
-
-			carsVector = gasStationXMLParser.getCarsVector();
-					
-			cleanSrvTest(gasStation, carsVector);
+			gasStation.startGasStation();
+			
 		} catch (ParserConfigurationException | SAXException | IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-		
-		//blockingQueueTest();
-		//TODO: start cleaning service
-		//TODO: start all pumps
-		//TODO: add cars to blocking queue
-	}
 	
+	}
+	/*
 	public static void cleanSrvTest(GasStation gasStation, Vector<Car> carsVector) throws InterruptedException {
 		for(int i=0; i<carsVector.size(); i++){
 			gasStation.getCleaningSrv().addCarToAutoWashQueue(carsVector.get(i));
@@ -113,6 +103,6 @@ public class Program extends Thread{
 		pushThread.start();
 		
 		
-	}
+	}*/
 
 }

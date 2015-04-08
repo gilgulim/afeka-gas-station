@@ -17,7 +17,7 @@ public class CleaningTeamsManager implements Runnable{
 	
 	@Override
 	public void run() {
-		GasStation gasStation;
+		
 		WashingTeam washingTeam;
 		Car car;
 		try {
