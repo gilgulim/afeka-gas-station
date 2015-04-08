@@ -1,8 +1,16 @@
 package bl;
 
+import java.io.IOException;
 import java.util.Vector;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import loging.CustomFilter;
+import loging.CustomLogFormatter;
 
 public class WashingTeam {
+	private static Logger logger = Logger.getLogger("logger");
 	static private int idGenerator = 1;
 	private int id;
 	private boolean isBusy;
@@ -12,6 +20,23 @@ public class WashingTeam {
 		setId(idGenerator++);
 		setBusy(false);
 		employees = new Vector<Person>();
+		
+		//Init logger
+		FileHandler theFileHandler;
+		try {
+			
+			theFileHandler = new FileHandler(String.format("WashingTeam_%d.txt", this.id), true);
+			theFileHandler.setFormatter(new CustomLogFormatter());
+			theFileHandler.setFilter(new CustomFilter(this, "id", this.id));
+			logger.addHandler(theFileHandler);
+			
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public void addEmployee(String name){
 		Person p = new Person(name);
@@ -42,7 +67,8 @@ public class WashingTeam {
 		return "WashingTeam [id=" + id + ", isBusy=" + isBusy + ", employees="
 				+ employees + "]";
 	}
+	public void washingCar(Car car) {
+		logger.log(Level.INFO, String.format("WashingTeam %d began wash car %d.", this.getId(), car.getId()),this);		
+	}
 	
-
-
 }

@@ -14,6 +14,7 @@ public class ManualCarWash extends Thread{
 	@Override
 	public void run() {
 		try {
+			washingTeam.washingCar(car);
 			ManualCarWash.sleep(CleaningTeamsManager.getManualWashTime());
 			GasStation gasStation = car.getGasStaion();
 			

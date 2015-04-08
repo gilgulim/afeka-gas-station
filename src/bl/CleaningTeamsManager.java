@@ -1,8 +1,11 @@
 package bl;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CleaningTeamsManager implements Runnable{
+	private static Logger logger = Logger.getLogger("logger");
 	private final static int MANUAL_WASH_TIME = 1500; 
 	private CleaningServices cleaningServices;
 	private LinkedBlockingQueue<WashingTeam> teamsQueue;

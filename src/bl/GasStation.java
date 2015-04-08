@@ -66,11 +66,11 @@ public class GasStation implements Runnable {
 				fuelPump.startFuelPump();
 			}
 			
-			/*
+			
 			//Starting the cleaning services
 			if(cleaningSrv != null){
 				cleaningSrv.startCleaningSrv();
-			}*/
+			}
 		}
 	}
 	
