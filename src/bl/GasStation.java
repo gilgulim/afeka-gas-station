@@ -1,9 +1,17 @@
 package bl;
+import java.io.IOException;
 import java.util.Vector;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+
+import loging.CustomFilter;
+import loging.CustomLogFormatter;
 
 public class GasStation implements Runnable {
 	
+	private static Logger logger = Logger.getLogger("logger");
+	private final String MAIN_LOG_FILE_NAME = "GasStation.txt";
 	private String name;
 	private float fuelPricePerLiter;
 	private int pumpingPacePerLiter;
@@ -29,6 +37,21 @@ public class GasStation implements Runnable {
 		carsDispatchThread.setName("CarsDispatchThread");
 		
 		dispachQueue = new LinkedBlockingDeque<Car>();
+		
+		FileHandler theFileHandler;
+		try {
+			
+			theFileHandler = new FileHandler(MAIN_LOG_FILE_NAME, true);
+			theFileHandler.setFormatter(new CustomLogFormatter());
+			logger.addHandler(theFileHandler);
+			
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void startGasStation(){

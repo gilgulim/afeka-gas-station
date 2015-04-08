@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import loging.CustomFilter;
 import loging.CustomLogFormatter;
+import bl.Exceptions.FuelRepositoryEmptyException;
 import bl.Exceptions.LowFuelAmountException;
 
 
@@ -134,7 +135,10 @@ public class FuelPump implements Runnable
 							--fuelAmount;
 							
 						}catch(LowFuelAmountException ex){
+							
 							//TODO: Do something with this error. Maybe log?
+						}catch(FuelRepositoryEmptyException ex){
+							//Out of fuel in the gas station
 						}
 					}
 		
