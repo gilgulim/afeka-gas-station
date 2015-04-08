@@ -16,10 +16,10 @@ public class ManualCarWash extends Thread{
 		try {
 			ManualCarWash.sleep(CleaningTeamsManager.getManualWashTime());
 			GasStation gasStation = car.getGasStaion();
-			CleaningServices cleaningService = gasStation.getCleaningSrv();
 			
 			gasStation.AddCarDispatcherQueue(car);
-			cleaningService.getCleanTeamMngr().addTeamToQueue(washingTeam);
+			cleanTeamMngr.addTeamToQueue(washingTeam);
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
