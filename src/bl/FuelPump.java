@@ -129,8 +129,6 @@ public class FuelPump implements Runnable
 							//NOTE: This is a blocking method will wait here if needed
 							fuelRep.getOneLitterOfFuel();
 							
-							//Waiting here to simulate pumping one litter of fuel
-							Thread.sleep(gasStation.getPumpingPacePerLiter());
 							
 							//Decrease the amount of left fuel by one litter
 							++fuelPumped;

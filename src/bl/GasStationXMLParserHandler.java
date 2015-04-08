@@ -23,7 +23,10 @@ public class GasStationXMLParserHandler {
 		String maxCapacity = xmlParser.getNodeAttr("maxCapacity", fuelRepNode);
 		String currentCapacity = xmlParser.getNodeAttr("currentCapacity", fuelRepNode);
 		
-		fuelRep = new FuelRepository(Integer.parseInt(currentCapacity), Integer.parseInt(maxCapacity));
+		String pumpingPacePerLiterStr = xmlParser.getNodeAttr("pupingPacePerLiter", fuelRepNode);
+		int pupingPacePerLiter = Integer.parseInt(pumpingPacePerLiterStr);
+		
+		fuelRep = new FuelRepository(Integer.parseInt(currentCapacity), Integer.parseInt(maxCapacity), pupingPacePerLiter);
 		
 		return fuelRep;	
 	}
@@ -108,10 +111,7 @@ public class GasStationXMLParserHandler {
 		String fuelPricePerLiterStr = xmlParser.getNodeAttr("pricePerLiter", rootNode);
 		float fuelPricePerLiter = Float.parseFloat(fuelPricePerLiterStr);
 		
-		String pumpingPacePerLiterStr = xmlParser.getNodeAttr("pupingPacePerLiter", rootNode);
-		int pupingPacePerLiter = Integer.parseInt(pumpingPacePerLiterStr);
-		
-		gasStation = new GasStation(gasStationName, fuelPricePerLiter, pupingPacePerLiter);
+		gasStation = new GasStation(gasStationName, fuelPricePerLiter);
 		
 		String numOfPumpsStr = xmlParser.getNodeAttr("numOfPumps", rootNode);
 		int numOfPumps =Integer.parseInt(numOfPumpsStr); 

@@ -14,7 +14,6 @@ public class GasStation implements Runnable {
 	private final String MAIN_LOG_FILE_NAME = "GasStation.txt";
 	private String name;
 	private float fuelPricePerLiter;
-	private int pumpingPacePerLiter;
 	private Vector<FuelPump> pumpsVec;
 	private CleaningServices cleaningSrv;
 	private FuelRepository fuelRep;
@@ -24,10 +23,9 @@ public class GasStation implements Runnable {
 	private boolean isActive;
 	
 	
-	public GasStation (String name, float fuelPricePerLiter, int pumpingPacePerLiter){
+	public GasStation (String name, float fuelPricePerLiter){
 		this.name = name;
 		this.fuelPricePerLiter = fuelPricePerLiter;
-		this.pumpingPacePerLiter = pumpingPacePerLiter;
 		this.isActive = false;
 		
 		pumpsVec = new Vector<FuelPump>();
@@ -113,9 +111,7 @@ public class GasStation implements Runnable {
 	public float getFuelPricePerLiter() {
 		return fuelPricePerLiter;
 	}
-	public int getPumpingPacePerLiter(){
-		return pumpingPacePerLiter;
-	}
+	
 
 	@Override
 	public String toString() {
@@ -141,7 +137,7 @@ public class GasStation implements Runnable {
 						fuelPump = getCarFuelPump(car);
 						if(fuelPump != null){
 							
-							int waitInPump = fuelPump.getLitersInQueue() *  pumpingPacePerLiter;
+							int waitInPump = fuelPump.getLitersInQueue() *  fuelRep.getPumpingPacePerLiter();
 							int waitInWash = cleaningSrv.getCurrentWaitingTime();
 							
 							if(waitInPump <= waitInWash){

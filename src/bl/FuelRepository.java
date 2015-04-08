@@ -1,5 +1,7 @@
 package bl;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 import bl.Exceptions.FuelRepositoryEmptyException;
@@ -13,10 +15,15 @@ public class FuelRepository {
 	private boolean isAvailable;
 	private int currentCapacity;
 	private int maxCapacity;
+	private int pumpingPacePerLiter;
+	private Lock fillingRepositoryLock;
 	
-	public FuelRepository(int currentCapacity, int maxCapacity){
+	
+	public FuelRepository(int currentCapacity, int maxCapacity, int pumpingPacePerLiter){
 		this.maxCapacity = maxCapacity;
 		this.currentCapacity = currentCapacity;
+		this.pumpingPacePerLiter = pumpingPacePerLiter;
+		this.fillingRepositoryLock = new ReentrantLock();
 		
 		if(maxCapacity > 0){
 			this.isAvailable = true;
@@ -26,13 +33,17 @@ public class FuelRepository {
 		
 		logger.info("Fuel-Repository started.");
 	}
-	public synchronized void getOneLitterOfFuel() throws LowFuelAmountException, FuelRepositoryEmptyException
+	public synchronized void getOneLitterOfFuel() throws LowFuelAmountException, FuelRepositoryEmptyException, InterruptedException
 	{
 		float lowCapacityBorder = (float)(LOW_BORDER_PERCENTAGE / 100 * maxCapacity);
 		if(currentCapacity > 0){
 			if(lowCapacityBorder >= currentCapacity){
 				logger.warning("Fuel amount in fuel repository is lower than: " + lowCapacityBorder);
 				currentCapacity--;
+				
+				//Waiting here to simulate pumping one litter of fuel
+				Thread.sleep(this.pumpingPacePerLiter);
+				
 				throw new LowFuelAmountException();
 			}
 			currentCapacity--;
@@ -50,6 +61,9 @@ public class FuelRepository {
 	}
 	public int getMaxCapacity() {
 		return maxCapacity;
+	}
+	public int getPumpingPacePerLiter(){
+		return pumpingPacePerLiter;
 	}
 	
 }
