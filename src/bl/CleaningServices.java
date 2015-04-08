@@ -1,8 +1,16 @@
 package bl;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.Vector;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import loging.CustomFilter;
+import loging.CustomLogFormatter;
 
 public class CleaningServices implements Runnable{
+	private static Logger logger = Logger.getLogger("logger");
 	private CleaningTeamsManager cleanTeamMngr;
 	private LinkedBlockingQueue<Car> autoWashCarsQueue;
 	private LinkedBlockingQueue<Car> manualWascarsQueue;
