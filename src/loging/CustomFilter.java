@@ -3,6 +3,8 @@ import java.lang.reflect.Field;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 
+import com.sun.media.jfxmedia.logging.Logger;
+
 
 public class CustomFilter implements Filter{
 
@@ -22,18 +24,28 @@ public class CustomFilter implements Filter{
 		try {
 			
 			String parentClassName = parentClass.getClass().getName();
+			String sourceClassName = record.getSourceClassName();
 			Field field;
+			Object fieldValue = null;
 			
-			field = parentClass.getClass().getDeclaredField(compareField);
-			field.setAccessible(true);
-			Object fieldValue = field.get(parentClass);
-			
-			String sourceClassName = record.getSourceClassName(); 
+			if(record.getParameters()!= null){
+				field = record.getParameters()[0].getClass().getDeclaredField(compareField);
+				field.setAccessible(true);
+				fieldValue = field.get(record.getParameters()[0]);
+			}
+
 			
 			if(sourceClassName == parentClassName){ 
-				if (fieldValue.equals(compareFieldValue)){
-					return true;		
-				}	
+				if (fieldValue !=null){
+					if(fieldValue.equals(compareFieldValue)){
+						return true;		
+					}else{
+						return false;
+					}
+					
+				}else{
+					return true;
+				}
 			}else{
 				return false;
 			}

@@ -3,6 +3,7 @@ package bl;
 import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import loging.CustomFilter;
@@ -35,7 +36,7 @@ public class FuelPump implements Runnable
 			
 			theFileHandler = new FileHandler(String.format("Pump_%d.txt", this.id), true);
 			theFileHandler.setFormatter(new CustomLogFormatter());
-			theFileHandler.setFilter(new CustomFilter(this, "id", id));
+			theFileHandler.setFilter(new CustomFilter(this, "id", this.id));
 			logger.addHandler(theFileHandler);
 			
 		} catch (SecurityException e) {
@@ -77,7 +78,7 @@ public class FuelPump implements Runnable
 		if(!isActive){
 			isActive = true;
 			pumpQueueThread.start();
-			logger.info("FuelPump started");
+			logger.log(Level.INFO, String.format("FuelPump %d started.", this.id), this);
 		}
 	}
 	
@@ -89,7 +90,7 @@ public class FuelPump implements Runnable
 			//Releasing the blocking queue
 			carsQueue.notifyAll();
 			
-			logger.info("FuelPump closed");
+			logger.log(Level.INFO, "FuelPump closed", this);
 		}
 	}
 
@@ -113,7 +114,7 @@ public class FuelPump implements Runnable
 				Car pumpingCar = carsQueue.take();
 				if(pumpingCar != null){
 					
-					logger.info(String.format("Start fueling car: %s", pumpingCar));
+					logger.log(Level.INFO, String.format("Start fueling car: %s", pumpingCar), this);
 					
 					fuelPumped = 0;
 					carFuelRequest = pumpingCar.getFuelAmountRequired();
@@ -145,7 +146,7 @@ public class FuelPump implements Runnable
 					currentLitersInQueue -= fuelPumped;
 					pumpingCar.setFuelAmountRequired(carFuelRequest - fuelPumped);
 					
-					logger.info(String.format("Finished fueling car: %s", pumpingCar));
+					logger.log(Level.INFO, String.format("Finished fueling car: %s", pumpingCar), this);
 					
 					//Sending the car back to the gas station dispatcher
 					gasStation.AddCarDispatcherQueue(pumpingCar);	
