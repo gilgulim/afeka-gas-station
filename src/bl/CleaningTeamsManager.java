@@ -31,7 +31,6 @@ public class CleaningTeamsManager implements Runnable{
 					sendCarToManualWash(car,washingTeam);	
 				}
 			}
-			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
