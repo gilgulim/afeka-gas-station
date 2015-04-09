@@ -29,7 +29,6 @@ public class CleaningServices implements Runnable{
 
 		autoWashCarsQueue = new LinkedBlockingQueue<Car>();
 		manualWascarsQueue = new LinkedBlockingQueue<Car>();
-		
 	}
 	
 	@Override
