@@ -3,10 +3,10 @@ package bl;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Random;
 
 public class CleaningTeamsManager implements Runnable{
 	private static Logger logger = Logger.getLogger("logger");
-	private final static int MANUAL_WASH_TIME = 1500; 
 	private CleaningServices cleaningServices;
 	private LinkedBlockingQueue<WashingTeam> teamsQueue;
 	private Thread manualWashQueueThread;
@@ -26,9 +26,13 @@ public class CleaningTeamsManager implements Runnable{
 		try {
 			while(isActive){
 				washingTeam = teamsQueue.take();
+				logger.log(Level.INFO, String.format("WashingTeam %d removed from washing teams queue and waiting for next car.", washingTeam.getId()),washingTeam);
+				
 				car = cleaningServices.getCarFromQueue();
+				logger.log(Level.INFO, String.format("car %d removed from manual wash queue.", car.getId()),car);
+				
 				if(car != null && washingTeam != null){
-					sendCarToManualWash(car,washingTeam);	
+					sendCarToManualWash(car,washingTeam);
 				}
 			}
 		} catch (InterruptedException e) {
@@ -62,7 +66,8 @@ public class CleaningTeamsManager implements Runnable{
 	}
 
 	public static int getManualWashTime() {
-		return MANUAL_WASH_TIME;
+		Random randomGenerator = new Random();
+		return randomGenerator.nextInt(1000)+1000;
 	}
 
 	public LinkedBlockingQueue<WashingTeam> getTeamsQueue() {

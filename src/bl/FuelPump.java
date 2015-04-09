@@ -59,7 +59,7 @@ public class FuelPump implements Runnable
 			currentLitersInQueue+=car.getFuelAmountRequired();
 
 			carsQueue.put(car);
-			
+			logger.log(Level.INFO, String.format("car %d added to fuel pump %d waiting queue.", car.getId(), this.getId()),car);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,7 +78,7 @@ public class FuelPump implements Runnable
 		if(!isActive){
 			isActive = true;
 			pumpQueueThread.start();
-			logger.log(Level.INFO, String.format("FuelPump %d started.", this.id), this);
+			logger.log(Level.INFO, String.format("Pump %d started.", this.id), this);
 		}
 	}
 	
@@ -90,7 +90,7 @@ public class FuelPump implements Runnable
 			//Releasing the blocking queue
 			carsQueue.notifyAll();
 			
-			logger.log(Level.INFO, "FuelPump closed", this);
+			logger.log(Level.INFO, String.format("Pump %d closed",this.getId()), this);
 		}
 	}
 
@@ -114,8 +114,8 @@ public class FuelPump implements Runnable
 				Car pumpingCar = carsQueue.take();
 				if(pumpingCar != null){
 					
-					logger.log(Level.INFO, "Car start fueling.", pumpingCar);
-					logger.log(Level.INFO, String.format("Start fueling car: %s", pumpingCar), this);
+					logger.log(Level.INFO, String.format("Car %d starts fueling.",pumpingCar.getId()), pumpingCar);
+					logger.log(Level.INFO, String.format("pump %d starts fueling car: %s",this.getId(), pumpingCar.getId()), this);
 					
 					fuelPumped = 0;
 					carFuelRequest = pumpingCar.getFuelAmountRequired();
@@ -145,11 +145,12 @@ public class FuelPump implements Runnable
 					currentLitersInQueue -= fuelPumped;
 					pumpingCar.setFuelAmountRequired(carFuelRequest - fuelPumped);
 					
-					logger.log(Level.INFO, "Car Finished fueling.", pumpingCar);
-					logger.log(Level.INFO, String.format("Finished fueling car: %s", pumpingCar), this);
+					logger.log(Level.INFO, String.format("Car %d finished fueling.",pumpingCar.getId()), pumpingCar);
+					logger.log(Level.INFO, String.format("pump %d finished fueling car %d", this.getId(), pumpingCar.getId()), this);
 					
 					//Sending the car back to the gas station dispatcher
 					gasStation.AddCarDispatcherQueue(pumpingCar);	
+					logger.log(Level.INFO, String.format("Car %d added to dispatcher queue.",pumpingCar.getId()), pumpingCar);
 
 				}
 				

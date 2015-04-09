@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.Vector;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import loging.CustomFilter;
@@ -82,7 +83,7 @@ public class GasStation implements Runnable {
 	}
 	
 	public void AddCarDispatcherQueue(Car car){
-		logger.info(String.format("Car added to main queue: %s", car));
+		logger.log(Level.INFO, String.format("car %d arrived to gas station and added to dispatcher queue.", car.getId()),car);
 		dispachQueue.add(car);
 	}
 	
@@ -129,8 +130,9 @@ public class GasStation implements Runnable {
 			try {
 				
 				Car car = dispachQueue.take();
+		
 				if(car != null){
-					
+					logger.log(Level.INFO, String.format("car %d removed from dispatcher queue.", car.getId()),car);
 					//If the car request both service make a decision about the fastest route
 					if(car.isRequiresFuel() && car.isRequiresWash()){
 						
@@ -172,8 +174,8 @@ public class GasStation implements Runnable {
 						car.setRequiresWash(false);
 						cleaningSrv.addCarToAutoWashQueue(car);
 					}else{
-						
 						//Nothing is required the car is leaving the station.
+						logger.log(Level.INFO, String.format("Car %d left the gas station.",car.getId()), car);
 					}
 					
 				

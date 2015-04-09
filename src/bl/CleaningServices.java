@@ -1,5 +1,6 @@
 package bl;
 
+import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.Vector;
 import java.util.logging.FileHandler;
@@ -11,6 +12,8 @@ import loging.CustomLogFormatter;
 
 public class CleaningServices implements Runnable{
 	private static Logger logger = Logger.getLogger("logger");
+	private static int idGenerator = 1;
+	private int id;
 	private CleaningTeamsManager cleanTeamMngr;
 	private LinkedBlockingQueue<Car> autoWashCarsQueue;
 	private LinkedBlockingQueue<Car> manualWascarsQueue;
@@ -21,6 +24,7 @@ public class CleaningServices implements Runnable{
 	
 	
 	public CleaningServices(int carWashPrice, int autoWashTime){
+		this.id = idGenerator++;
 		cleanTeamMngr = new CleaningTeamsManager(this);
 		autoWashQueueThread = new Thread(this);
 		
@@ -29,6 +33,23 @@ public class CleaningServices implements Runnable{
 
 		autoWashCarsQueue = new LinkedBlockingQueue<Car>();
 		manualWascarsQueue = new LinkedBlockingQueue<Car>();
+		
+		//Init logger
+		FileHandler theFileHandler;
+		try {
+			
+			theFileHandler = new FileHandler("CleaningServices.txt", true);
+			theFileHandler.setFormatter(new CustomLogFormatter());
+			theFileHandler.setFilter(new CustomFilter(this, "id", this.id));
+			logger.addHandler(theFileHandler);
+			
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -38,9 +59,12 @@ public class CleaningServices implements Runnable{
 		try {
 			while(isActive){
 				car = autoWashCarsQueue.take();
+				logger.log(Level.INFO, String.format("car %d removed from auto wash queue.", car.getId()),car);
+				logger.log(Level.INFO, String.format("car %d about to start auto wash.", car.getId()),this);
 				if(car != null){
-					sendCarToAutoWash(car);
+					sendCarToAutoWash(car);		
 					manualWascarsQueue.put(car);
+					logger.log(Level.INFO, String.format("car %d done auto wash and added to manual wash queue.", car.getId()),car);
 				}
 			}
 			
@@ -54,8 +78,8 @@ public class CleaningServices implements Runnable{
 	public void startCleaningSrv(){
 		if(!isActive){
 			isActive = true;
+			logger.log(Level.INFO, "cleaning services started.",this);
 			autoWashQueueThread.start();
-			
 			cleanTeamMngr.startCleaningTeam();
 		}
 	}
@@ -63,6 +87,7 @@ public class CleaningServices implements Runnable{
 	public void stopCleaningSrv(){
 		if(isActive){
 			isActive = false;
+			logger.log(Level.INFO, "cleaning services stopped.",this);
 			autoWashCarsQueue.notifyAll();
 		}
 	}
@@ -74,22 +99,22 @@ public class CleaningServices implements Runnable{
 
 	private void sendCarToAutoWash(Car car) throws InterruptedException{
 		Thread.sleep(autoWashTime);
+		logger.log(Level.INFO, String.format("car %d began auto wash.", car.getId()),car);
+		logger.log(Level.INFO, String.format("car %d finished auto wash.", car.getId()),this);
 	}
 		
 	public void addCarToAutoWashQueue(Car car) throws InterruptedException{
 		autoWashCarsQueue.put(car);
+		logger.log(Level.INFO, String.format("car %d added to auto wash queue.", car.getId()),car);
 	}
 	
 	public int getCurrentWaitingTime(){
-		int result, autoWashQueueSize, manualWashQueueSize, autoWashTime, manualWashTime, teamsQueueSize;
+		int result, autoWashQueueSize, autoWashTime;
 		
 		autoWashQueueSize = autoWashCarsQueue.size();
-		manualWashQueueSize = getCarsQueue().size();
-		teamsQueueSize = cleanTeamMngr.getTeamsQueue().size();
 		autoWashTime = this.autoWashTime;
-		manualWashTime = CleaningTeamsManager.getManualWashTime();
-		
-		result = (autoWashQueueSize * autoWashTime) + (manualWashQueueSize / teamsQueueSize)*manualWashTime;
+	
+		result = autoWashQueueSize * autoWashTime;
 		return result;
 	}
 

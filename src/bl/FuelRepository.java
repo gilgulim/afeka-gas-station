@@ -22,7 +22,7 @@ public class FuelRepository implements Runnable {
 	private Lock fillingRepositoryLock;
 	private Thread fillRepositoryThread;
 	private int fillFuelAmount;
-	
+	private boolean warningFlag = true;
 	
 	public FuelRepository(int currentCapacity, int maxCapacity, int pumpingPacePerLiter){
 		this.maxCapacity = maxCapacity;
@@ -42,13 +42,19 @@ public class FuelRepository implements Runnable {
 	}
 	public void getOneLitterOfFuel() throws LowFuelAmountException, FuelRepositoryEmptyException, InterruptedException
 	{
+		
+		
 		fillingRepositoryLock.lock();
 		try{
 			float lowCapacityBorder = (float)(LOW_BORDER_PERCENTAGE / 100 * maxCapacity);
 			if(currentCapacity > 0){
 				if(lowCapacityBorder >= currentCapacity){
 					
-					logger.warning("Fuel amount in fuel repository is lower than: " + lowCapacityBorder);
+					if(warningFlag){
+						logger.warning("Fuel amount in fuel repository is lower than: " + lowCapacityBorder);
+						warningFlag = false;
+					}
+					
 					
 					currentCapacity--;
 					
@@ -56,6 +62,8 @@ public class FuelRepository implements Runnable {
 					Thread.sleep(this.pumpingPacePerLiter);
 					
 					throw new LowFuelAmountException();
+				}else{
+					warningFlag=true;
 				}
 				currentCapacity--;
 			}else{
