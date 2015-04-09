@@ -24,30 +24,32 @@ public class CustomFilter implements Filter{
 		try {
 			
 			String parentClassName = parentClass.getClass().getName();
-			String sourceClassName = record.getSourceClassName();
+			String sourceClassName;
 			Field field;
 			Object fieldValue = null;
 			
 			if(record.getParameters()!= null){
+				
+				sourceClassName = record.getParameters()[0].getClass().getName();
+				
 				field = record.getParameters()[0].getClass().getDeclaredField(compareField);
 				field.setAccessible(true);
 				fieldValue = field.get(record.getParameters()[0]);
-			}
 
-			
-			if(sourceClassName == parentClassName){ 
-				if (fieldValue !=null){
-					if(fieldValue.equals(compareFieldValue)){
-						return true;		
+				if(sourceClassName == parentClassName){ 
+					if (fieldValue !=null){
+						if(fieldValue.equals(compareFieldValue)){
+							return true;		
+						}else{
+							return false;
+						}
+						
 					}else{
-						return false;
+						return true;
 					}
-					
 				}else{
-					return true;
+					return false;
 				}
-			}else{
-				return false;
 			}
 			
 		
