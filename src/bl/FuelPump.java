@@ -114,6 +114,7 @@ public class FuelPump implements Runnable
 				Car pumpingCar = carsQueue.take();
 				if(pumpingCar != null){
 					
+					logger.log(Level.INFO, "Car start fueling.", pumpingCar);
 					logger.log(Level.INFO, String.format("Start fueling car: %s", pumpingCar), this);
 					
 					fuelPumped = 0;
@@ -144,6 +145,7 @@ public class FuelPump implements Runnable
 					currentLitersInQueue -= fuelPumped;
 					pumpingCar.setFuelAmountRequired(carFuelRequest - fuelPumped);
 					
+					logger.log(Level.INFO, "Car Finished fueling.", pumpingCar);
 					logger.log(Level.INFO, String.format("Finished fueling car: %s", pumpingCar), this);
 					
 					//Sending the car back to the gas station dispatcher

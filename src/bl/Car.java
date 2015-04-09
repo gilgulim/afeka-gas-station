@@ -1,19 +1,47 @@
 package bl;
 
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+
+import loging.CustomFilter;
+import loging.CustomLogFormatter;
+
 
 
 public class Car {
+	
+	private static Logger logger = Logger.getLogger("logger");
 	private int id;
 	private boolean isRequiresWash;
 	private boolean isRequiresFuel;
 	private int fuelAmountRequired;
 	private int pumpIndex;
 	private GasStation gasStaion;
+	
+	
 	public Car(int id, boolean requiresWash, boolean requiresFuel, GasStation gasStation){
 		setId(id);
 		setRequiresWash(requiresWash);
 		setRequiresFuel(requiresFuel);
 		setGasStaion(gasStation);
+		
+		//Init logger
+		FileHandler theFileHandler;
+		try {
+			
+			theFileHandler = new FileHandler(String.format("Car_%d.txt", this.id), true);
+			theFileHandler.setFormatter(new CustomLogFormatter());
+			theFileHandler.setFilter(new CustomFilter(this, "id", this.id));
+			logger.addHandler(theFileHandler);
+			
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public int getId() {
