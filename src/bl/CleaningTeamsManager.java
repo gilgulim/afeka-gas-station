@@ -61,7 +61,9 @@ public class CleaningTeamsManager implements Runnable{
 		manualCarWash.start();
 	}
 	
-	protected void addTeamToQueue(WashingTeam washingTeam) throws InterruptedException{
+	protected synchronized void addTeamToQueue(WashingTeam washingTeam) throws InterruptedException{
+		
+		logger.log(Level.INFO, String.format("WashingTeam %d added to washing teams queue.", washingTeam.getId()),washingTeam);
 		teamsQueue.put(washingTeam);
 	}
 

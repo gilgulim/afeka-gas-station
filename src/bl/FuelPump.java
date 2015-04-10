@@ -149,7 +149,7 @@ public class FuelPump implements Runnable
 					logger.log(Level.INFO, String.format("pump %d finished fueling car %d", this.getId(), pumpingCar.getId()), this);
 					
 					//Sending the car back to the gas station dispatcher
-					gasStation.AddCarDispatcherQueue(pumpingCar);	
+					gasStation.addCarDispatcherQueue(pumpingCar);	
 					logger.log(Level.INFO, String.format("Car %d added to dispatcher queue.",pumpingCar.getId()), pumpingCar);
 
 				}

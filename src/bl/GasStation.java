@@ -82,8 +82,8 @@ public class GasStation implements Runnable {
 		}
 	}
 	
-	public void AddCarDispatcherQueue(Car car){
-		logger.log(Level.INFO, String.format("car %d arrived to gas station and added to dispatcher queue.", car.getId()),car);
+	public synchronized void addCarDispatcherQueue(Car car){
+		logger.log(Level.INFO, String.format("Car %d arrived to gas station and added to dispatcher queue.", car.getId()),car);
 		dispachQueue.add(car);
 	}
 	

@@ -136,7 +136,7 @@ public class GasStationXMLParserHandler {
 				Node carNode = xmlParser.getNodeByIndex(carNodeList, i);
 				Car car = parseToCar(carNode);
 				car.setGasStaion(gasStation);
-				gasStation.AddCarDispatcherQueue(car);
+				gasStation.addCarDispatcherQueue(car);
 			}
 		}	
 		return gasStation;

@@ -55,24 +55,4 @@ public class WashingTeam {
 	public Vector<Person> getEmployees() {
 		return employees;
 	}
-
-	public void logWashingCar(Car car) {
-		logger.log(Level.INFO, String.format("WashingTeam %d began wash car %d.", this.getId(), car.getId()),this);		
-	}
-	
-	public void logStart() {
-		logger.log(Level.INFO, String.format("WashingTeam %d started.", this.getId()),this);		
-	}
-	
-	public void logStop() {
-		logger.log(Level.INFO, String.format("WashingTeam %d stopped.", this.getId()),this);		
-	}	
-	
-	public void logAddedToQueue() {
-		logger.log(Level.INFO, String.format("WashingTeam %d added to washing teams queue.", this.getId()),this);		
-	}	
-
-	public void logRemovedFromQueue() {
-		logger.log(Level.INFO, String.format("WashingTeam %d removed from washing teams queue.", this.getId()),this);		
-	}	
 }
