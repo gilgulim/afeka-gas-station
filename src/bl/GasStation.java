@@ -25,6 +25,7 @@ public class GasStation implements Runnable {
 	
 	
 	public GasStation (String name, float fuelPricePerLiter){
+		logger.setUseParentHandlers(false);
 		this.name = name;
 		this.fuelPricePerLiter = fuelPricePerLiter;
 		this.isActive = false;
