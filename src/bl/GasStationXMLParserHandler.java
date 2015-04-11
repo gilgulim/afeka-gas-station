@@ -2,6 +2,8 @@ package bl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
+
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Node;
@@ -131,14 +133,19 @@ public class GasStationXMLParserHandler {
 		Node carsNode = xmlParser.getNode("Cars", rootEntitiesNodeList);
 		NodeList carNodeList = carsNode.getChildNodes();
 		
+		Vector<Car> initCarsList = new Vector<Car>();
+		
 		for (int i=0; i< carNodeList.getLength() ; i++){
 			if (carNodeList.item(i).getNodeName().equals("Car")){
 				Node carNode = xmlParser.getNodeByIndex(carNodeList, i);
 				Car car = parseToCar(carNode);
 				car.setGasStaion(gasStation);
-				gasStation.addCarDispatcherQueue(car);
+				initCarsList.add(car);
 			}
 		}	
+		
+		gasStation.initCarsQueue(initCarsList);
+		
 		return gasStation;
 	}
 }

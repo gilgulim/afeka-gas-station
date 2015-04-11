@@ -1,9 +1,0 @@
-11/04/2015 20:54:53 INFO:	Car 333 arrived to gas station and added to dispatcher queue.
-11/04/2015 20:54:53 INFO:	car 333 removed from dispatcher queue.
-11/04/2015 20:54:53 INFO:	car 333 added to fuel pump 2 waiting queue.
-11/04/2015 20:54:53 INFO:	Car 333 starts fueling.
-11/04/2015 20:54:53 INFO:	Car 333 finished fueling.
-11/04/2015 20:54:53 INFO:	Car 333 arrived to gas station and added to dispatcher queue.
-11/04/2015 20:54:53 INFO:	Car 333 added to dispatcher queue.
-11/04/2015 20:54:53 INFO:	car 333 removed from dispatcher queue.
-11/04/2015 20:54:53 INFO:	Car 333 left the gas station.

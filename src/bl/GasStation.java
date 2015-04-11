@@ -90,10 +90,16 @@ public class GasStation implements Runnable {
 			}
 		}
 	}
-	
+	public void initCarsQueue(Vector<Car> cars){
+		dispachQueue.addAll(cars);
+	}
 	public synchronized void addCarDispatcherQueue(Car car){
-		logger.log(Level.INFO, String.format("Car %d arrived to gas station and added to dispatcher queue.", car.getId()),car);
-		dispachQueue.add(car);
+		if(isActive){
+			logger.log(Level.INFO, String.format("Car %d arrived to gas station and added to dispatcher queue.", car.getId()),car);
+			dispachQueue.add(car);
+		}else{
+			logger.log(Level.INFO, String.format("Car %d left the gas station.",car.getId()), car);
+		}
 	}
 	
 	public void addPump(FuelPump fp){
