@@ -49,11 +49,13 @@ public class ConsoleMenu {
 	}
 
 	private void closeGasStation() {
-
+		System.out.println("gas station is closed");
 	}
 
 	private void showStatistics() {
-		// TODO Auto-generated method stub
+		System.out.println("total cars treated:  " + gasStation.getTotalCars());
+		System.out.println("total cars cleaned: " + gasStation.getTotalCarsWashed());
+		System.out.println("total cars fueled:  " + gasStation.getTotalCarsFueled());
 		
 	}
 

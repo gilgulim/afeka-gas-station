@@ -26,6 +26,10 @@ public class GasStation implements Runnable {
 	private Thread carsDispatchThread;
 	private boolean isActive;
 	
+	private int totalCars = 0;
+	private int totalCarsFueled = 0;
+	private int totalCarsWashed = 0;
+	
 	
 	
 	public GasStation (String name, float fuelPricePerLiter){
@@ -164,10 +168,12 @@ public class GasStation implements Runnable {
 							if(waitInPump <= waitInWash){
 								car.setRequiresFuel(false);
 								fuelPump.addCar(car);
+								totalCarsFueled++;
 								
 							}else{
 								car.setRequiresWash(false);
 								cleaningSrv.addCarToAutoWashQueue(car);
+								totalCarsWashed++;
 							}
 							
 						}
@@ -183,6 +189,7 @@ public class GasStation implements Runnable {
 							 
 							car.setRequiresFuel(false);
 							fuelPump.addCar(car);
+							totalCarsFueled++;
 							 
 						}else{
 							//TODO: Throw an exception or an error message to the log that there is no such pump.
@@ -192,9 +199,11 @@ public class GasStation implements Runnable {
 					}else if(car.isRequiresWash()){ //Only wash
 						car.setRequiresWash(false);
 						cleaningSrv.addCarToAutoWashQueue(car);
+						totalCarsWashed++;
 					}else{
 						//Nothing is required the car is leaving the station.
 						logger.log(Level.INFO, String.format("Car %d left the gas station.",car.getId()), car);
+						totalCars++;
 					}
 					
 				
@@ -221,6 +230,18 @@ public class GasStation implements Runnable {
 			return pumpsVec.get(pumpIndex);
 		}
 		return null;
+	}
+
+	public int getTotalCars() {
+		return totalCars;
+	}
+
+	public int getTotalCarsFueled() {
+		return totalCarsFueled;
+	}
+
+	public int getTotalCarsWashed() {
+		return totalCarsWashed;
 	}
 	
 
