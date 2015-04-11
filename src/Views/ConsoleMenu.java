@@ -49,7 +49,9 @@ public class ConsoleMenu {
 	}
 
 	private void closeGasStation() {
-		System.out.println("gas station is closed");
+		gasStation.stopGasStation();
+		System.out.println("gas station is now closed");
+		isRunning = false;
 	}
 
 	private void showStatistics() {
