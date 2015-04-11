@@ -2,6 +2,7 @@ package bl;
 import java.io.IOException;
 import java.util.Vector;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,6 +14,8 @@ public class GasStation implements Runnable {
 	
 	private static Logger logger = Logger.getLogger("logger");
 	private final String MAIN_LOG_FILE_NAME = "GasStation.txt";
+	private final int QUEUE_POLL_TIMEOUT = 2000;
+	
 	private String name;
 	private float fuelPricePerLiter;
 	private Vector<FuelPump> pumpsVec;
@@ -24,8 +27,9 @@ public class GasStation implements Runnable {
 	private boolean isActive;
 	
 	
+	
 	public GasStation (String name, float fuelPricePerLiter){
-		logger.setUseParentHandlers(false);
+		
 		this.name = name;
 		this.fuelPricePerLiter = fuelPricePerLiter;
 		this.isActive = false;
@@ -43,6 +47,7 @@ public class GasStation implements Runnable {
 			theFileHandler = new FileHandler(MAIN_LOG_FILE_NAME, true);
 			theFileHandler.setFormatter(new CustomLogFormatter());
 			logger.addHandler(theFileHandler);
+			//logger.setUseParentHandlers(false);
 			
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
@@ -79,7 +84,10 @@ public class GasStation implements Runnable {
 	public void stopGasStation(){
 		if(isActive){
 			isActive = false;
-			
+			cleaningSrv.stopCleaningSrv();
+			for(FuelPump fuelpump : pumpsVec){
+				fuelpump.stopFuelPump();
+			}
 		}
 	}
 	
@@ -114,6 +122,9 @@ public class GasStation implements Runnable {
 		return fuelPricePerLiter;
 	}
 	
+	public void setErrorHandler(ErrorNotifierHandler errorHandler){
+		fuelRep.setErrorHandler(errorHandler);
+	}
 
 	@Override
 	public String toString() {
@@ -125,12 +136,13 @@ public class GasStation implements Runnable {
 	public void run() {
 		
 		FuelPump fuelPump;
+		boolean threadActive = true;
 		
-		while(isActive){
+		while(threadActive){
 
 			try {
 				
-				Car car = dispachQueue.take();
+				Car car = dispachQueue.poll(QUEUE_POLL_TIMEOUT, TimeUnit.MILLISECONDS);
 		
 				if(car != null){
 					logger.log(Level.INFO, String.format("car %d removed from dispatcher queue.", car.getId()),car);
@@ -180,6 +192,8 @@ public class GasStation implements Runnable {
 					}
 					
 				
+				}else if(!isActive){
+					threadActive = false;
 				}
 				
 			} catch (InterruptedException e) {
@@ -188,6 +202,8 @@ public class GasStation implements Runnable {
 			}
 			
 		}
+		
+		logger.log(Level.INFO, "Gas station dispatcher queue closed.");
 
 	}
 	
@@ -200,4 +216,6 @@ public class GasStation implements Runnable {
 		}
 		return null;
 	}
+	
+
 }

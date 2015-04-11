@@ -2,6 +2,7 @@ package bl;
 
 import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.Vector;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -13,10 +14,10 @@ import loging.CustomLogFormatter;
 public class CleaningServices implements Runnable{
 	private static Logger logger = Logger.getLogger("logger");
 	private static int idGenerator = 1;
+	private final int QUEUE_POLL_TIMEOUT = 2000;
 	private int id;
 	private CleaningTeamsManager cleanTeamMngr;
 	private LinkedBlockingQueue<Car> autoWashCarsQueue;
-	private LinkedBlockingQueue<Car> manualWascarsQueue;
 	private int carWashPrice;
 	private int autoWashTime;
 	private Thread autoWashQueueThread;
@@ -32,7 +33,7 @@ public class CleaningServices implements Runnable{
 		this.autoWashTime = autoWashTime;
 
 		autoWashCarsQueue = new LinkedBlockingQueue<Car>();
-		manualWascarsQueue = new LinkedBlockingQueue<Car>();
+		
 		
 		//Init logger
 		FileHandler theFileHandler;
@@ -55,16 +56,19 @@ public class CleaningServices implements Runnable{
 	@Override
 	public void run(){
 		Car car;
+		boolean threadActive = true;
 		
 		try {
-			while(isActive){
-				car = autoWashCarsQueue.take();
-				logger.log(Level.INFO, String.format("car %d removed from auto wash queue.", car.getId()),car);
-				logger.log(Level.INFO, String.format("car %d about to start auto wash.", car.getId()),this);
+			while(threadActive){
+				car = autoWashCarsQueue.poll(QUEUE_POLL_TIMEOUT,TimeUnit.MILLISECONDS);
 				if(car != null){
-					sendCarToAutoWash(car);		
-					manualWascarsQueue.put(car);
+					logger.log(Level.INFO, String.format("car %d removed from auto wash queue.", car.getId()), car);
+					logger.log(Level.INFO, String.format("car %d about to start auto wash.", car.getId()), this);
+					sendCarToAutoWash(car);
+					cleanTeamMngr.addCarToQueue(car);
 					logger.log(Level.INFO, String.format("car %d done auto wash and added to manual wash queue.", car.getId()),car);
+				}else if(!isActive){
+						threadActive = false;
 				}
 			}
 			
@@ -72,6 +76,8 @@ public class CleaningServices implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		logger.log(Level.INFO, "Auto wash queue closed.", this);
 		
 	}
 	
@@ -86,9 +92,10 @@ public class CleaningServices implements Runnable{
 	
 	public void stopCleaningSrv(){
 		if(isActive){
+			autoWashCarsQueue.clear();
 			isActive = false;
+			cleanTeamMngr.stopCleaningTeam();
 			logger.log(Level.INFO, "cleaning services stopped.",this);
-			autoWashCarsQueue.notifyAll();
 		}
 	}
 	
@@ -116,18 +123,6 @@ public class CleaningServices implements Runnable{
 	
 		result = autoWashQueueSize * autoWashTime;
 		return result;
-	}
-
-	protected Car getCarFromQueue() throws InterruptedException{
-		return manualWascarsQueue.take();
-	}
-	
-	protected void addCarToQueue(Car car) throws InterruptedException{
-		manualWascarsQueue.put(car);
-	}
-
-	public LinkedBlockingQueue<Car> getCarsQueue() {
-		return manualWascarsQueue;
 	}
 
 	public CleaningTeamsManager getCleanTeamMngr() {

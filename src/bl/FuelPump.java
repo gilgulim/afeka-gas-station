@@ -2,6 +2,7 @@ package bl;
 
 import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,13 +10,13 @@ import java.util.logging.Logger;
 import loging.CustomFilter;
 import loging.CustomLogFormatter;
 import bl.Exceptions.FuelRepositoryEmptyException;
-import bl.Exceptions.LowFuelAmountException;
 
 
 public class FuelPump implements Runnable
 {
 	private static Logger logger = Logger.getLogger("logger");
 	private static int idGenerator = 1;
+	private final int QUEUE_POLL_TIMEOUT = 2000;
 	private LinkedBlockingQueue<Car> carsQueue;
 	private Thread pumpQueueThread;
 	private int id;
@@ -87,9 +88,6 @@ public class FuelPump implements Runnable
 			//Stopping the thread
 			isActive = false;
 			
-			//Releasing the blocking queue
-			carsQueue.notifyAll();
-			
 			logger.log(Level.INFO, String.format("Pump %d closed",this.getId()), this);
 		}
 	}
@@ -105,13 +103,15 @@ public class FuelPump implements Runnable
 		int fuelPumped, carFuelRequest;
 		GasStation gasStation;
 		FuelRepository fuelRep;
-		while(isActive){
+		boolean threadActive = true;
+		
+		while(threadActive){
 			
 			try {
 				
 				
 				//Will wait here if the queue is empty
-				Car pumpingCar = carsQueue.take();
+				Car pumpingCar = carsQueue.poll(QUEUE_POLL_TIMEOUT, TimeUnit.MILLISECONDS);
 				if(pumpingCar != null){
 					
 					logger.log(Level.INFO, String.format("Car %d starts fueling.",pumpingCar.getId()), pumpingCar);
@@ -125,20 +125,18 @@ public class FuelPump implements Runnable
 					while(fuelPumped < carFuelRequest){
 						
 						try{
-							
+								
 							//Requesting one litter of fuel from the main repository
 							//NOTE: This is a blocking method will wait here if needed
 							fuelRep.getOneLitterOfFuel();
-							
-							
+
 							//Decrease the amount of left fuel by one litter
 							++fuelPumped;
-							
-						}catch(LowFuelAmountException ex){
-							
-							//TODO: Do something with this error. Maybe log?
-						}catch(FuelRepositoryEmptyException ex){
+						
+						}
+						catch(FuelRepositoryEmptyException ex){
 							//Out of fuel in the gas station
+							
 						}
 					}
 		
@@ -152,6 +150,8 @@ public class FuelPump implements Runnable
 					gasStation.addCarDispatcherQueue(pumpingCar);	
 					logger.log(Level.INFO, String.format("Car %d added to dispatcher queue.",pumpingCar.getId()), pumpingCar);
 
+				}else if(!isActive){
+					threadActive = false;
 				}
 				
 			} catch (InterruptedException e) {
@@ -160,6 +160,7 @@ public class FuelPump implements Runnable
 			}
 			
 		}
+		logger.log(Level.INFO, String.format("Fuel pump queue with id: %d closed", this.id), this);
 		
 	}
 	

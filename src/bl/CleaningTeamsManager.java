@@ -1,21 +1,24 @@
 package bl;
 
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Random;
 
 public class CleaningTeamsManager implements Runnable{
 	private static Logger logger = Logger.getLogger("logger");
-	private CleaningServices cleaningServices;
+	private final int QUEUE_POLL_TIMEOUT = 2000;
 	private LinkedBlockingQueue<WashingTeam> teamsQueue;
+	private LinkedBlockingQueue<Car> manualWascarsQueue;
 	private Thread manualWashQueueThread;
 	private boolean isActive;
 	
 	public CleaningTeamsManager(CleaningServices cleaningServices) {
-		this.cleaningServices = cleaningServices;
+		isActive = false;
 		manualWashQueueThread = new Thread(this);
 		teamsQueue = new LinkedBlockingQueue<WashingTeam>();
+		manualWascarsQueue = new LinkedBlockingQueue<Car>();
 	}
 	
 	@Override
@@ -23,23 +26,40 @@ public class CleaningTeamsManager implements Runnable{
 		
 		WashingTeam washingTeam;
 		Car car;
-		try {
-			while(isActive){
-				washingTeam = teamsQueue.take();
-				logger.log(Level.INFO, String.format("WashingTeam %d removed from washing teams queue and waiting for next car.", washingTeam.getId()),washingTeam);
+		boolean threadActive = true;
+
+		while(threadActive){
+			try {				
 				
-				car = cleaningServices.getCarFromQueue();
-				logger.log(Level.INFO, String.format("car %d removed from manual wash queue.", car.getId()),car);
+				washingTeam = teamsQueue.poll(QUEUE_POLL_TIMEOUT, TimeUnit.MILLISECONDS);
+				if(washingTeam != null){
+
+					car = manualWascarsQueue.poll(QUEUE_POLL_TIMEOUT, TimeUnit.MILLISECONDS);
 				
-				if(car != null && washingTeam != null){
-					sendCarToManualWash(car,washingTeam);
+					if(car != null){
+						
+						logger.log(Level.INFO, String.format("WashingTeam %d removed from washing teams queue and waiting for next car.", washingTeam.getId()),washingTeam);						
+						logger.log(Level.INFO, String.format("car %d removed from manual wash queue.", car.getId()),car);
+						sendCarToManualWash(car,washingTeam);
+						
+					}else{ 
+						if(!isActive){
+							threadActive = false;
+						}else{
+							//Pushing back the washingTeam that has not been in use.
+							teamsQueue.put(washingTeam);
+						}
+							
+					}
+					
 				}
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
+		logger.log(Level.INFO, "Cleaning teams manager queue closed.");
 	}
 
 	public void startCleaningTeam(){
@@ -52,8 +72,11 @@ public class CleaningTeamsManager implements Runnable{
 	public void stopCleaningTeam(){
 		if(isActive){
 			isActive = false;
-			teamsQueue.notifyAll();
 		}
+	}
+	
+	protected void addCarToQueue(Car car) throws InterruptedException{
+		manualWascarsQueue.put(car);
 	}
 	
 	private void sendCarToManualWash(Car car, WashingTeam washingTeam) throws InterruptedException {
