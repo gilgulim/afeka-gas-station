@@ -27,7 +27,7 @@ public class ManualCarWash extends Thread{
 			ManualCarWash.sleep(CleaningTeamsManager.getManualWashTime());
 			
 			logger.log(Level.INFO, String.format("Car %d finished manual wash.", car.getId()),gasStation.getCleaningSrv());
-			
+			logger.log(Level.INFO, String.format("Car %d finished manual washing.", car.getId()),car);
 			gasStation.addCarDispatcherQueue(car);
 			cleanTeamMngr.addTeamToQueue(washingTeam);
 			

@@ -5,9 +5,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import bl.ErrorNotifierHandler.ErrorType;
 import bl.Exceptions.FillingRepositoryMaxLimitException;
 import bl.Exceptions.FuelRepositoryEmptyException;
-import bl.Exceptions.LowFuelAmountException;
 
 public class FuelRepository implements Runnable {
 	
@@ -23,6 +23,7 @@ public class FuelRepository implements Runnable {
 	private Thread fillRepositoryThread;
 	private int fillFuelAmount;
 	private boolean warningFlag = true;
+	private ErrorNotifierHandler errorHandler;
 	
 	public FuelRepository(int currentCapacity, int maxCapacity, int pumpingPacePerLiter){
 		this.maxCapacity = maxCapacity;
@@ -40,7 +41,7 @@ public class FuelRepository implements Runnable {
 		
 		logger.info("Fuel-Repository started.");
 	}
-	public void getOneLitterOfFuel() throws LowFuelAmountException, FuelRepositoryEmptyException, InterruptedException
+	public void getOneLitterOfFuel() throws FuelRepositoryEmptyException, InterruptedException
 	{
 		
 		
@@ -53,6 +54,9 @@ public class FuelRepository implements Runnable {
 					if(warningFlag){
 						logger.warning("Fuel amount in fuel repository is lower than: " + lowCapacityBorder);
 						warningFlag = false;
+						if(errorHandler!= null){
+							errorHandler.notifyError(ErrorType.LowFuel);
+						}
 					}
 					
 					
@@ -61,13 +65,15 @@ public class FuelRepository implements Runnable {
 					//Waiting here to simulate pumping one litter of fuel
 					Thread.sleep(this.pumpingPacePerLiter);
 					
-					throw new LowFuelAmountException();
 				}else{
 					warningFlag=true;
 				}
 				currentCapacity--;
 			}else{
 				logger.warning("Fuel repository is empty!");
+				if(errorHandler!= null){
+					errorHandler.notifyError(ErrorType.GasStationEmpty);
+				}
 				throw new FuelRepositoryEmptyException();
 			}
 		}
@@ -96,6 +102,9 @@ public class FuelRepository implements Runnable {
 		}
 		
 		fillRepositoryThread.start();
+	}
+	public void setErrorHandler(ErrorNotifierHandler errorHandler){
+		this.errorHandler = errorHandler; 
 	}
 	
 	@Override

@@ -1,0 +1,4 @@
+11/04/2015 20:54:53 INFO:	WashingTeam 1 added to washing teams queue.
+11/04/2015 20:54:55 INFO:	WashingTeam 1 removed from washing teams queue and waiting for next car.
+11/04/2015 20:54:55 INFO:	WashingTeam 1 began wash car 222.
+11/04/2015 20:54:56 INFO:	WashingTeam 1 added to washing teams queue.

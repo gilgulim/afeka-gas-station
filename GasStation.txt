@@ -1,0 +1,107 @@
+11/04/2015 20:54:53 INFO:	Fuel-Repository started.
+11/04/2015 20:54:53 INFO:	WashingTeam 1 added to washing teams queue.
+11/04/2015 20:54:53 INFO:	WashingTeam 2 added to washing teams queue.
+11/04/2015 20:54:53 INFO:	WashingTeam 3 added to washing teams queue.
+11/04/2015 20:54:53 INFO:	Car 111 arrived to gas station and added to dispatcher queue.
+11/04/2015 20:54:53 INFO:	Car 333 arrived to gas station and added to dispatcher queue.
+11/04/2015 20:54:53 INFO:	Car 222 arrived to gas station and added to dispatcher queue.
+11/04/2015 20:54:53 INFO:	Car 444 arrived to gas station and added to dispatcher queue.
+11/04/2015 20:54:53 INFO:	Gas-Station started.
+11/04/2015 20:54:53 INFO:	Pump 1 started.
+11/04/2015 20:54:53 INFO:	car 111 removed from dispatcher queue.
+11/04/2015 20:54:53 INFO:	Pump 2 started.
+11/04/2015 20:54:53 INFO:	Car 111 starts fueling.
+11/04/2015 20:54:53 INFO:	car 111 added to fuel pump 2 waiting queue.
+11/04/2015 20:54:53 INFO:	Pump 3 started.
+11/04/2015 20:54:53 INFO:	pump 2 starts fueling car: 111
+11/04/2015 20:54:53 INFO:	car 333 removed from dispatcher queue.
+11/04/2015 20:54:53 INFO:	Pump 4 started.
+11/04/2015 20:54:53 INFO:	Car 111 finished fueling.
+11/04/2015 20:54:53 INFO:	car 333 added to fuel pump 2 waiting queue.
+11/04/2015 20:54:53 INFO:	car 222 removed from dispatcher queue.
+11/04/2015 20:54:53 INFO:	pump 2 finished fueling car 111
+11/04/2015 20:54:53 INFO:	cleaning services started.
+11/04/2015 20:54:53 INFO:	car 222 added to auto wash queue.
+11/04/2015 20:54:53 INFO:	Car 111 arrived to gas station and added to dispatcher queue.
+11/04/2015 20:54:53 INFO:	car 222 removed from auto wash queue.
+11/04/2015 20:54:53 INFO:	car 444 removed from dispatcher queue.
+11/04/2015 20:54:53 INFO:	car 222 about to start auto wash.
+11/04/2015 20:54:53 INFO:	Car 111 added to dispatcher queue.
+11/04/2015 20:54:53 INFO:	car 444 added to auto wash queue.
+11/04/2015 20:54:53 INFO:	Car 333 starts fueling.
+11/04/2015 20:54:53 INFO:	car 111 removed from dispatcher queue.
+11/04/2015 20:54:53 INFO:	pump 2 starts fueling car: 333
+11/04/2015 20:54:53 INFO:	car 111 added to auto wash queue.
+11/04/2015 20:54:53 INFO:	Car 333 finished fueling.
+11/04/2015 20:54:53 INFO:	pump 2 finished fueling car 333
+11/04/2015 20:54:53 INFO:	Car 333 arrived to gas station and added to dispatcher queue.
+11/04/2015 20:54:53 INFO:	Car 333 added to dispatcher queue.
+11/04/2015 20:54:53 INFO:	car 333 removed from dispatcher queue.
+11/04/2015 20:54:53 INFO:	Car 333 left the gas station.
+11/04/2015 20:54:55 INFO:	car 222 began auto wash.
+11/04/2015 20:54:55 INFO:	car 222 finished auto wash.
+11/04/2015 20:54:55 INFO:	car 222 done auto wash and added to manual wash queue.
+11/04/2015 20:54:55 INFO:	car 444 removed from auto wash queue.
+11/04/2015 20:54:55 INFO:	car 444 about to start auto wash.
+11/04/2015 20:54:55 INFO:	WashingTeam 1 removed from washing teams queue and waiting for next car.
+11/04/2015 20:54:55 INFO:	car 222 removed from manual wash queue.
+11/04/2015 20:54:55 INFO:	WashingTeam 1 began wash car 222.
+11/04/2015 20:54:55 INFO:	Car 222 began washing by WashingTeam 1.
+11/04/2015 20:54:55 INFO:	Car 222 about to start manual wash.
+11/04/2015 20:54:56 INFO:	Car 222 finished manual wash.
+11/04/2015 20:54:56 INFO:	Car 222 finished manual washing.
+11/04/2015 20:54:56 INFO:	Car 222 arrived to gas station and added to dispatcher queue.
+11/04/2015 20:54:56 INFO:	car 222 removed from dispatcher queue.
+11/04/2015 20:54:56 INFO:	Car 222 left the gas station.
+11/04/2015 20:54:56 INFO:	WashingTeam 1 added to washing teams queue.
+11/04/2015 20:54:56 INFO:	car 444 began auto wash.
+11/04/2015 20:54:56 INFO:	car 444 finished auto wash.
+11/04/2015 20:54:56 INFO:	WashingTeam 2 removed from washing teams queue and waiting for next car.
+11/04/2015 20:54:56 INFO:	car 444 done auto wash and added to manual wash queue.
+11/04/2015 20:54:56 INFO:	car 111 removed from auto wash queue.
+11/04/2015 20:54:56 INFO:	car 111 about to start auto wash.
+11/04/2015 20:54:56 INFO:	car 444 removed from manual wash queue.
+11/04/2015 20:54:56 INFO:	WashingTeam 2 began wash car 444.
+11/04/2015 20:54:56 INFO:	Car 444 began washing by WashingTeam 2.
+11/04/2015 20:54:56 INFO:	Car 444 about to start manual wash.
+11/04/2015 20:54:57 INFO:	Car 444 finished manual wash.
+11/04/2015 20:54:57 INFO:	Car 444 finished manual washing.
+11/04/2015 20:54:58 INFO:	Car 444 arrived to gas station and added to dispatcher queue.
+11/04/2015 20:54:58 INFO:	WashingTeam 2 added to washing teams queue.
+11/04/2015 20:54:58 INFO:	car 444 removed from dispatcher queue.
+11/04/2015 20:54:58 INFO:	Car 444 starts fueling.
+11/04/2015 20:54:58 INFO:	car 444 added to fuel pump 2 waiting queue.
+11/04/2015 20:54:58 INFO:	pump 2 starts fueling car: 444
+11/04/2015 20:54:58 WARNING:	Fuel amount in fuel repository is lower than: 100.0
+11/04/2015 20:54:58 INFO:	car 111 began auto wash.
+11/04/2015 20:54:58 INFO:	car 111 finished auto wash.
+11/04/2015 20:54:58 INFO:	car 111 done auto wash and added to manual wash queue.
+11/04/2015 20:54:58 INFO:	WashingTeam 3 removed from washing teams queue and waiting for next car.
+11/04/2015 20:54:58 INFO:	car 111 removed from manual wash queue.
+11/04/2015 20:54:58 INFO:	WashingTeam 3 began wash car 111.
+11/04/2015 20:54:58 INFO:	Car 111 began washing by WashingTeam 3.
+11/04/2015 20:54:58 INFO:	Car 111 about to start manual wash.
+11/04/2015 20:54:59 INFO:	Car 111 finished manual wash.
+11/04/2015 20:54:59 INFO:	Car 111 finished manual washing.
+11/04/2015 20:54:59 INFO:	Car 111 arrived to gas station and added to dispatcher queue.
+11/04/2015 20:54:59 INFO:	WashingTeam 3 added to washing teams queue.
+11/04/2015 20:54:59 INFO:	car 111 removed from dispatcher queue.
+11/04/2015 20:54:59 INFO:	Car 111 left the gas station.
+11/04/2015 20:55:00 INFO:	Car 444 finished fueling.
+11/04/2015 20:55:00 INFO:	pump 2 finished fueling car 444
+11/04/2015 20:55:00 INFO:	Car 444 arrived to gas station and added to dispatcher queue.
+11/04/2015 20:55:00 INFO:	Car 444 added to dispatcher queue.
+11/04/2015 20:55:00 INFO:	car 444 removed from dispatcher queue.
+11/04/2015 20:55:00 INFO:	Car 444 left the gas station.
+11/04/2015 20:55:05 INFO:	cleaning services stopped.
+11/04/2015 20:55:05 INFO:	Pump 1 closed
+11/04/2015 20:55:05 INFO:	Pump 2 closed
+11/04/2015 20:55:05 INFO:	Pump 3 closed
+11/04/2015 20:55:05 INFO:	Pump 4 closed
+11/04/2015 20:55:05 INFO:	Fuel pump queue with id: 1 closed
+11/04/2015 20:55:05 INFO:	Fuel pump queue with id: 3 closed
+11/04/2015 20:55:05 INFO:	Fuel pump queue with id: 4 closed
+11/04/2015 20:55:06 INFO:	Fuel pump queue with id: 2 closed
+11/04/2015 20:55:06 INFO:	Gas station dispatcher queue closed.
+11/04/2015 20:55:06 INFO:	Auto wash queue closed.
+11/04/2015 20:55:06 INFO:	Cleaning teams manager queue closed.
