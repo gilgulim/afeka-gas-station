@@ -116,7 +116,7 @@ public class FuelRepository implements Runnable {
 		try {
 			while(fuelAmount < fillFuelAmount){
 				Thread.sleep(FILLING_REPOSITORY_PACE);
-				logger.log(Level.INFO, "Filling fuel repository -%d%-",fuelAmount / fillFuelAmount *100);
+				logger.log(Level.INFO, String.format("Filling fuel repository: %d", currentCapacity));
 				fuelAmount++;
 			}
 			

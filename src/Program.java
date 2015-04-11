@@ -12,6 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import Views.ConsoleMenu;
 import bl.*;
 import Helpers.XMLParser;
 
@@ -23,11 +24,13 @@ public class Program extends Thread{
 	public static void main(String[] args) {
 		File file = new File("data.xml");
 		GasStation gasStation;
+		ConsoleMenu consoleMenu;
 		
 		try {
 			GasStationXMLParserHandler gasStationXMLParser = new GasStationXMLParserHandler(file);
 			gasStation = gasStationXMLParser.parseToGasStation();
 			gasStation.startGasStation();
+			consoleMenu = new ConsoleMenu(gasStation);
 			
 		} catch (ParserConfigurationException | SAXException | IOException | InterruptedException e) {
 			e.printStackTrace();
