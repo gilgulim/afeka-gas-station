@@ -14,8 +14,6 @@ public class ConsoleMenu {
 		this.gasStation = gasStation;
 		s = new Scanner(System.in);
 		isRunning = true;
-		
-		this.startMenu();
 	}
 
 	public void startMenu(){

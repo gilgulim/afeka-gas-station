@@ -31,6 +31,8 @@ public class Program extends Thread{
 			gasStation = gasStationXMLParser.parseToGasStation();
 			gasStation.startGasStation();
 			consoleMenu = new ConsoleMenu(gasStation);
+			consoleMenu.startMenu();
+			
 			
 		} catch (ParserConfigurationException | SAXException | IOException | InterruptedException e) {
 			e.printStackTrace();

@@ -47,7 +47,7 @@ public class GasStation implements Runnable {
 			theFileHandler = new FileHandler(MAIN_LOG_FILE_NAME, true);
 			theFileHandler.setFormatter(new CustomLogFormatter());
 			logger.addHandler(theFileHandler);
-			//logger.setUseParentHandlers(false);
+			logger.setUseParentHandlers(false);
 			
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
@@ -128,7 +128,7 @@ public class GasStation implements Runnable {
 		return fuelPricePerLiter;
 	}
 	
-	public void setErrorHandler(ErrorNotifierHandler errorHandler){
+	public void setErrorHandler(NotificationsHandler errorHandler){
 		fuelRep.setErrorHandler(errorHandler);
 	}
 

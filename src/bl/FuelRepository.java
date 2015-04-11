@@ -5,7 +5,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import bl.ErrorNotifierHandler.ErrorType;
+import bl.NotificationsHandler.NotifyType;
 import bl.Exceptions.FillingRepositoryMaxLimitException;
 import bl.Exceptions.FuelRepositoryEmptyException;
 
@@ -23,7 +23,7 @@ public class FuelRepository implements Runnable {
 	private Thread fillRepositoryThread;
 	private int fillFuelAmount;
 	private boolean warningFlag = true;
-	private ErrorNotifierHandler errorHandler;
+	private NotificationsHandler notifyHandler;
 	
 	public FuelRepository(int currentCapacity, int maxCapacity, int pumpingPacePerLiter){
 		this.maxCapacity = maxCapacity;
@@ -54,8 +54,8 @@ public class FuelRepository implements Runnable {
 					if(warningFlag){
 						logger.warning("Fuel amount in fuel repository is lower than: " + lowCapacityBorder);
 						warningFlag = false;
-						if(errorHandler!= null){
-							errorHandler.notifyError(ErrorType.LowFuel);
+						if(notifyHandler!= null){
+							notifyHandler.notificationHandle(NotifyType.warnLowFuel, null);
 						}
 					}
 					
@@ -71,8 +71,8 @@ public class FuelRepository implements Runnable {
 				currentCapacity--;
 			}else{
 				logger.warning("Fuel repository is empty!");
-				if(errorHandler!= null){
-					errorHandler.notifyError(ErrorType.GasStationEmpty);
+				if(notifyHandler!= null){
+					notifyHandler.notificationHandle(NotifyType.errFuelRepositoryEmpty, null);
 				}
 				throw new FuelRepositoryEmptyException();
 			}
@@ -99,12 +99,14 @@ public class FuelRepository implements Runnable {
 		if(fuelAmount + currentCapacity > maxCapacity)
 		{
 			throw new FillingRepositoryMaxLimitException();
+			
+		}else{
+			
+			fillRepositoryThread.start();
 		}
-		
-		fillRepositoryThread.start();
 	}
-	public void setErrorHandler(ErrorNotifierHandler errorHandler){
-		this.errorHandler = errorHandler; 
+	public void setErrorHandler(NotificationsHandler errorHandler){
+		this.notifyHandler = errorHandler; 
 	}
 	
 	@Override
@@ -115,14 +117,25 @@ public class FuelRepository implements Runnable {
 		int fuelAmount = 0;
 		try {
 			while(fuelAmount < fillFuelAmount){
-				Thread.sleep(FILLING_REPOSITORY_PACE);
-				logger.log(Level.INFO, String.format("Filling fuel repository: %d", currentCapacity));
+				Thread.sleep(FILLING_REPOSITORY_PACE);		
 				fuelAmount++;
+				currentCapacity++;
+				
+				logger.log(Level.INFO, String.format("Filling fuel repository: %d", currentCapacity));
+				if(notifyHandler != null){
+					notifyHandler.notificationHandle(NotifyType.infoFuelingRepStatus, currentCapacity);
+				}
 			}
+			
+			
 			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		if(notifyHandler != null){
+			notifyHandler.notificationHandle(NotifyType.infoFinishedFuelRep, null);
 		}
 		
 		fillingRepositoryLock.unlock();;
