@@ -2,16 +2,18 @@ package Views;
 
 import java.util.Scanner;
 
-import bl.Car;
-import bl.GasStation;
+import bl.*;
 
-public class ConsoleMenu {
+
+public class ConsoleMenu implements NotificationsHandler {
+	
 	private GasStation gasStation;
 	private Scanner s;
 	private boolean isRunning;
 	
 	public ConsoleMenu(GasStation gasStation){
 		this.gasStation = gasStation;
+		this.gasStation.setNotificationHandler(this);
 		s = new Scanner(System.in);
 		isRunning = true;
 	}
@@ -126,5 +128,12 @@ public class ConsoleMenu {
 
 	public void setRunning(boolean isRunning) {
 		this.isRunning = isRunning;
+	}
+
+	@Override
+	public void notificationHandle(NotifyType errType, Object data) {
+		
+		
+		
 	}
 }

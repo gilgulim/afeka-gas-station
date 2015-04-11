@@ -105,8 +105,8 @@ public class FuelRepository implements Runnable {
 			fillRepositoryThread.start();
 		}
 	}
-	public void setErrorHandler(NotificationsHandler errorHandler){
-		this.notifyHandler = errorHandler; 
+	public void setNotificationHandler(NotificationsHandler notifyHandler){
+		this.notifyHandler = notifyHandler; 
 	}
 	
 	@Override

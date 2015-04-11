@@ -132,8 +132,8 @@ public class GasStation implements Runnable {
 		return fuelPricePerLiter;
 	}
 	
-	public void setErrorHandler(NotificationsHandler errorHandler){
-		fuelRep.setErrorHandler(errorHandler);
+	public void setNotificationHandler(NotificationsHandler errorHandler){
+		fuelRep.setNotificationHandler(errorHandler);
 	}
 
 	@Override
