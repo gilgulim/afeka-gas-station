@@ -51,6 +51,9 @@ public class ConsoleMenu implements NotificationsHandler {
 	}
 
 	private void closeGasStation() {
+		gasStation.stopGasStation();
+		System.out.println("gas station is now closed");
+		isRunning = false;
 		System.out.println("gas station is closed");
 	}
 
@@ -112,12 +115,8 @@ public class ConsoleMenu implements NotificationsHandler {
 			System.out.println();
 		}catch(Exception e){
 			System.out.println("wrong input\n");
-			System.out.println("\n");
-			
-		}
-		
-		
-		
+			System.out.println("\n");	
+		}	
 	}
 
 	public boolean isRunning() {
@@ -130,8 +129,17 @@ public class ConsoleMenu implements NotificationsHandler {
 
 	@Override
 	public void notificationHandle(NotifyType errType, Object data) {
-		
-		
-		
+		switch (errType){
+		case WARNING_LOW_FUEL : System.out.println("Repository low fuel");
+			break;
+		case WARNING_FUEL_REP_EMPTY : System.out.println("Repository empty");
+			break;
+		case INFO_FUEL_REP_DONE_FUELING: System.out.println("Repository done fueling");
+			break;
+		case INFO_FUEL_REP_STATUS: System.out.printf("%d ",data);
+			break;
+		default:
+			break;
+		}
 	}
 }

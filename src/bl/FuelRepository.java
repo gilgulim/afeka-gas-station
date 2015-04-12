@@ -13,7 +13,7 @@ public class FuelRepository implements Runnable {
 	
 	private static Logger logger = Logger.getLogger("logger");
 	
-	private final int FILLING_REPOSITORY_PACE = 800;
+	private final int FILLING_REPOSITORY_PACE = 80;
 	private final float LOW_BORDER_PERCENTAGE = 20;
 	private boolean isAvailable;
 	private int currentCapacity;
@@ -22,7 +22,8 @@ public class FuelRepository implements Runnable {
 	private Lock fillingRepositoryLock;
 	private Thread fillRepositoryThread;
 	private int fillFuelAmount;
-	private boolean warningFlag = true;
+	private boolean lowFuelwarningFlag = true;
+	private boolean emptyFuelwarningFlag = true;
 	private NotificationsHandler notifyHandler;
 	
 	public FuelRepository(int currentCapacity, int maxCapacity, int pumpingPacePerLiter){
@@ -41,7 +42,7 @@ public class FuelRepository implements Runnable {
 		
 		logger.info("Fuel-Repository started.");
 	}
-	public void getOneLitterOfFuel() throws FuelRepositoryEmptyException, InterruptedException
+	public boolean getOneLitterOfFuel() throws FuelRepositoryEmptyException, InterruptedException
 	{
 		
 		
@@ -51,11 +52,11 @@ public class FuelRepository implements Runnable {
 			if(currentCapacity > 0){
 				if(lowCapacityBorder >= currentCapacity){
 					
-					if(warningFlag){
+					if(lowFuelwarningFlag){
 						logger.warning("Fuel amount in fuel repository is lower than: " + lowCapacityBorder);
-						warningFlag = false;
+						lowFuelwarningFlag = false;
 						if(notifyHandler!= null){
-							notifyHandler.notificationHandle(NotifyType.warnLowFuel, null);
+							notifyHandler.notificationHandle(NotifyType.WARNING_LOW_FUEL, null);
 						}
 					}
 					
@@ -64,23 +65,32 @@ public class FuelRepository implements Runnable {
 					
 					//Waiting here to simulate pumping one litter of fuel
 					Thread.sleep(this.pumpingPacePerLiter);
+					return true;
 					
 				}else{
-					warningFlag=true;
+					lowFuelwarningFlag=true;
 				}
 				currentCapacity--;
 			}else{
-				logger.warning("Fuel repository is empty!");
-				if(notifyHandler!= null){
-					notifyHandler.notificationHandle(NotifyType.errFuelRepositoryEmpty, null);
+				if(emptyFuelwarningFlag){
+					logger.warning("Fuel repository is empty!");
+					if(notifyHandler!= null){
+						notifyHandler.notificationHandle(NotifyType.WARNING_FUEL_REP_EMPTY, null);
+					}
+					
+					emptyFuelwarningFlag = false;
+					
+					throw new FuelRepositoryEmptyException();	
+					
+					
 				}
-				throw new FuelRepositoryEmptyException();
+				
 			}
 		}
 		finally{
 			fillingRepositoryLock.unlock();
 		}
-			
+		return false;	
 	}
 	public boolean isAvailable() {
 		return isAvailable;
@@ -103,6 +113,7 @@ public class FuelRepository implements Runnable {
 		}else{
 			
 			fillRepositoryThread.start();
+			emptyFuelwarningFlag = true;
 		}
 	}
 	public void setNotificationHandler(NotificationsHandler notifyHandler){
@@ -123,7 +134,7 @@ public class FuelRepository implements Runnable {
 				
 				logger.log(Level.INFO, String.format("Filling fuel repository: %d", currentCapacity));
 				if(notifyHandler != null){
-					notifyHandler.notificationHandle(NotifyType.infoFuelingRepStatus, currentCapacity);
+					notifyHandler.notificationHandle(NotifyType.INFO_FUEL_REP_STATUS, currentCapacity);
 				}
 			}
 			
@@ -135,7 +146,7 @@ public class FuelRepository implements Runnable {
 		}
 		
 		if(notifyHandler != null){
-			notifyHandler.notificationHandle(NotifyType.infoFinishedFuelRep, null);
+			notifyHandler.notificationHandle(NotifyType.INFO_FUEL_REP_DONE_FUELING, null);
 		}
 		
 		fillingRepositoryLock.unlock();;
