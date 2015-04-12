@@ -132,24 +132,31 @@ public class FuelPump implements Runnable
 							//Decrease the amount of left fuel by one litter
 							if (fuelRep.getOneLitterOfFuel()){
 								++fuelPumped;	
+							}else{
+								if(!isActive){
+									break;
+								}	
 							}
 	
 						}
 						catch(FuelRepositoryEmptyException ex){
 							//Out of fuel in the gas station
+							
 						}
 					}
 		
-					currentLitersInQueue -= fuelPumped;
-					pumpingCar.setFuelAmountRequired(carFuelRequest - fuelPumped);
+					if(fuelPumped == carFuelRequest){
+						currentLitersInQueue -= fuelPumped;
+						pumpingCar.setFuelAmountRequired(carFuelRequest - fuelPumped);
+						
+						logger.log(Level.INFO, String.format("Car %d finished fueling.",pumpingCar.getId()), pumpingCar);
+						logger.log(Level.INFO, String.format("pump %d finished fueling car %d", this.getId(), pumpingCar.getId()), this);
+						
+						//Sending the car back to the gas station dispatcher
+						gasStation.addCarDispatcherQueue(pumpingCar);	
+						logger.log(Level.INFO, String.format("Car %d added to dispatcher queue.",pumpingCar.getId()), pumpingCar);
+					}
 					
-					logger.log(Level.INFO, String.format("Car %d finished fueling.",pumpingCar.getId()), pumpingCar);
-					logger.log(Level.INFO, String.format("pump %d finished fueling car %d", this.getId(), pumpingCar.getId()), this);
-					
-					//Sending the car back to the gas station dispatcher
-					gasStation.addCarDispatcherQueue(pumpingCar);	
-					logger.log(Level.INFO, String.format("Car %d added to dispatcher queue.",pumpingCar.getId()), pumpingCar);
-
 				}else if(!isActive){
 					threadActive = false;
 				}
