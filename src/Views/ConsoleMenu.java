@@ -51,9 +51,7 @@ public class ConsoleMenu implements NotificationsHandler {
 	}
 
 	private void closeGasStation() {
-		gasStation.stopGasStation();
-		System.out.println("gas station is now closed");
-		isRunning = false;
+		System.out.println("gas station is closed");
 	}
 
 	private void showStatistics() {
