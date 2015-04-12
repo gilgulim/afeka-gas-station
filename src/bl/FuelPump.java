@@ -128,10 +128,13 @@ public class FuelPump implements Runnable
 								
 							//Requesting one litter of fuel from the main repository
 							//NOTE: This is a blocking method will wait here if needed
-							fuelRep.getOneLitterOfFuel();
-
+	
 							//Decrease the amount of left fuel by one litter
-							++fuelPumped;
+							if (fuelRep.getOneLitterOfFuel()){
+								++fuelPumped;	
+							}
+
+							
 						
 						}
 						catch(FuelRepositoryEmptyException ex){
