@@ -133,13 +133,10 @@ public class FuelPump implements Runnable
 							if (fuelRep.getOneLitterOfFuel()){
 								++fuelPumped;	
 							}
-
-							
-						
+	
 						}
 						catch(FuelRepositoryEmptyException ex){
 							//Out of fuel in the gas station
-							
 						}
 					}
 		

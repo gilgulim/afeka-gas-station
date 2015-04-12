@@ -31,8 +31,7 @@ public class FuelRepository implements Runnable {
 		this.currentCapacity = currentCapacity;
 		this.pumpingPacePerLiter = pumpingPacePerLiter;
 		fillingRepositoryLock = new ReentrantLock();
-		fillRepositoryThread = new Thread(this);
-		fillRepositoryThread.setName("FillRepositoryThread");
+		
 		
 		if(maxCapacity > 0){
 			this.isAvailable = true;
@@ -112,6 +111,8 @@ public class FuelRepository implements Runnable {
 			
 		}else{
 			
+			fillRepositoryThread = new Thread(this);
+			fillRepositoryThread.setName("FillRepositoryThread");
 			fillRepositoryThread.start();
 			emptyFuelwarningFlag = true;
 		}
